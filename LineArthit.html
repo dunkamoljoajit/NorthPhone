@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - ไอ้พี่อาทิตย์</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="responsive.css">
+    <style>
+        /* --- Reset & Base Settings --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; user-select: none; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0b0b0c; }
+
+        /* --- iPhone Frame --- */
+        .iphone {
+            width: 393px; height: 852px; background-color: #000000;
+            border-radius: 54px; position: relative; border: 4px solid #2d2d30;
+            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        /* --- Status Bar --- */
+        .status-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600;
+            background-color: #111111; z-index: 10;
+        }
+        .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+
+        /* --- Chat Header --- */
+        .chat-header {
+            background-color: #111111; padding: 10px 18px 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 0.5px solid #222222; z-index: 10;
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        /* ปุ่มย้อนกลับไป Line.html */
+        .back-btn { color: #ffffff; font-size: 22px; text-decoration: none; cursor: pointer; }
+        .chat-title { color: white; font-size: 17px; font-weight: 600; }
+        .header-icons { display: flex; gap: 18px; font-size: 18px; color: #ffffff; }
+
+        /* --- Chat Area --- */
+        .chat-container {
+            flex: 1; padding: 20px 15px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 15px;
+            background-color: #0a0a0c;
+        }
+        
+        .message-wrapper { display: flex; flex-direction: column; max-width: 75%; }
+        .message-wrapper.received { align-self: flex-start; }
+        .message-wrapper.sent { align-self: flex-end; align-items: flex-end; }
+
+        .bubble {
+            padding: 12px 16px; font-size: 15px; line-height: 1.4;
+            border-radius: 20px; color: white; word-wrap: break-word;
+        }
+        .received .bubble {
+            background-color: #262628;
+            border-top-left-radius: 4px;
+        }
+        .sent .bubble {
+            background-color: #06C755;
+            border-top-right-radius: 4px;
+        }
+        
+        .msg-time { font-size: 11px; color: #8e8e93; margin-top: 4px; padding: 0 4px; }
+
+        /* --- Input Area --- */
+        .chat-input-area {
+            background-color: #111111; padding: 10px 15px 25px;
+            display: flex; align-items: center; gap: 12px; border-top: 0.5px solid #222222;
+        }
+        .input-icon { color: #8e8e93; font-size: 20px; cursor: pointer; }
+        .input-box {
+            flex: 1; background-color: #222222; color: white; border: none;
+            border-radius: 20px; padding: 10px 15px; font-size: 15px; outline: none;
+        }
+        
+        /* --- Home Indicator --- */
+        .home-indicator {
+            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+            width: 134px; height: 5px; background-color: white; border-radius: 10px; z-index: 20;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div id="clock-time">16:42</div>
+            <div class="status-right">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="header-left">
+                <!-- กดปุ่มนี้จะกลับไปหน้า Line.html -->
+                <a href="Line.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+                <span class="chat-title">ไอ้พี่อาทิตย์</span>
+            </div>
+            <div class="header-icons">
+                <i class="fa-solid fa-phone"></i>
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+
+        <!-- Chat History -->
+        <div class="chat-container">
+            
+            <!-- วันก่อนหน้าที่ชวนเล่นเกม -->
+            <div style="text-align: center; color: #8e8e93; font-size: 11px; margin: 5px 0;">Tuesday</div>
+
+            <div class="message-wrapper received">
+                <div class="bubble">ไอ้นอร์ธ คืนนี้ว่างป่าว</div>
+                <div class="msg-time">19:30</div>
+            </div>
+
+            <div class="message-wrapper received">
+                <div class="bubble">เข้าดิสมาตี้เกมหน่อย ขาดคนนึง</div>
+                <div class="msg-time">19:31</div>
+            </div>
+
+            <div class="message-wrapper sent">
+                <div class="bubble">เกมไรอ่ะพี่</div>
+                <div class="msg-time">19:45</div>
+            </div>
+
+            <div class="message-wrapper received">
+                <div class="bubble">Rov รีบๆ มาล่ะ รออยู่</div>
+                <div class="msg-time">19:46</div>
+            </div>
+            <div class="message-wrapper sent">
+                <div class="bubble">ผีพุ่งใต้เล่นไหมพี่</div>
+                <div class="msg-time">19:45</div>
+            </div>
+            <div class="message-wrapper received">
+                <div class="bubble">เล่น ๆ มาเหอะ ไอสัส</div>
+                <div class="msg-time">19:46</div>
+            </div>
+
+            <!-- ข้อความล่าสุด (เมื่อวาน) -->
+            <div style="text-align: center; color: #8e8e93; font-size: 11px; margin: 15px 0 5px;">Yesterday</div>
+
+            <div class="message-wrapper received">
+                <div class="bubble">นอร์ธ</div>
+                <div class="msg-time">14:00</div>
+            </div>
+
+            <div class="message-wrapper received">
+                <div class="bubble">มึงบอกผัวมึงปลดบล็อกแชทกู</div>
+                <div class="msg-time">14:01</div>
+            </div>
+            <div class="message-wrapper sent">
+                <div class="bubble">ไปทำไรให้พี่โจบล็อกอีกล่ะ</div>
+                <div class="msg-time">16:45</div>
+            </div> 
+
+        </div>
+        <!-- Input Area -->
+        <div class="chat-input-area">
+            <i class="fa-solid fa-plus input-icon"></i>
+            <i class="fa-solid fa-camera input-icon"></i>
+            <i class="fa-regular fa-image input-icon"></i>
+            <input type="text" class="input-box" placeholder="Aa">
+            <i class="fa-solid fa-microphone input-icon"></i>
+        </div>
+
+        <div class="home-indicator" onclick="window.location.href='index.html#home'"></div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock-time').textContent = 
+                now.getHours().toString().padStart(2, '0') + ':' + 
+                now.getMinutes().toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000); updateClock();
+    </script>
+</body>
+</html>

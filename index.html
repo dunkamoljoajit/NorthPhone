@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS 18 Simulator</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+    <div class="iphone">
+        <!-- Wallpaper Background -->
+        <div class="wallpaper" id="wallpaper"></div>
+
+        <!-- Dynamic Island -->
+        <div class="dynamic-island" id="dynamic-island">
+            <div class="island-camera"></div>
+            <div class="island-content">
+                <i class="fa-solid fa-lock" id="island-lock"></i>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar" id="status-bar">
+            <div class="status-left">
+                <span id="sb-time">14:22</span>
+            </div>
+            <div class="status-right">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <div class="battery">
+                    <div class="battery-level"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Lock Screen -->
+        <div class="lock-screen" id="lock-screen">
+            <div class="lock-header">
+                <i class="fa-solid fa-lock" id="main-lock"></i>
+                <div class="time" id="ls-time">14:22</div>
+                <div class="date" id="ls-date">Sunday, October 25</div>
+            </div>
+            <div class="lock-bottom">
+                <div class="lock-icon-btn"><i class="fa-solid fa-flashlight"></i></div>
+                <div class="swipe-text" id="swipe-up-area">
+                    <div class="swipe-bar"></div>
+                    <span>Swipe up to unlock</span>
+                </div>
+                <div class="lock-icon-btn"><i class="fa-solid fa-camera"></i></div>
+            </div>
+        </div>
+
+        <!-- 2. Passcode Screen -->
+        <div class="passcode-screen" id="passcode-screen">
+            <div class="passcode-title">Enter Passcode</div>
+            <div class="passcode-dots" id="passcode-dots">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <div class="keypad">
+                <div class="key" data-num="1"><span class="num">1</span><span class="letters"></span></div>
+                <div class="key" data-num="2"><span class="num">2</span><span class="letters">A B C</span></div>
+                <div class="key" data-num="3"><span class="num">3</span><span class="letters">D E F</span></div>
+                <div class="key" data-num="4"><span class="num">4</span><span class="letters">G H I</span></div>
+                <div class="key" data-num="5"><span class="num">5</span><span class="letters">J K L</span></div>
+                <div class="key" data-num="6"><span class="num">6</span><span class="letters">M N O</span></div>
+                <div class="key" data-num="7"><span class="num">7</span><span class="letters">P Q R S</span></div>
+                <div class="key" data-num="8"><span class="num">8</span><span class="letters">T U V</span></div>
+                <div class="key" data-num="9"><span class="num">9</span><span class="letters">W X Y Z</span></div>
+                <div class="key empty"></div>
+                <div class="key" data-num="0"><span class="num">0</span><span class="letters"></span></div>
+                <div class="key action" id="cancel-passcode">Cancel</div>
+            </div>
+        </div>
+
+        <!-- 3. Home Screen -->
+        <div class="home-screen" id="home-screen">
+            <div class="app-grid">
+                <!-- Phone -->
+                <div class="app" data-app="phone">
+                    <div class="app-icon">
+                        <img src="assets/icons/Phone.jpg" alt="Phone" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-phone" style="display:none;"><i class="fa-solid fa-phone"></i></div>
+                    </div>
+                    <span>Phone</span>
+                </div>
+                <!-- Messages -->
+                <div class="app" data-app="messages">
+                    <div class="app-icon">
+                        <img src="assets/icons/messages.jpg" alt="Messages" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-messages" style="display:none;"><i class="fa-solid fa-comment"></i></div>
+                    </div>
+                    <span>Messages</span>
+                </div>
+                <!-- Safari -->
+                <div class="app" data-app="safari">
+                    <div class="app-icon">
+                        <img src="assets/icons/safari.jpg" alt="Safari" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-safari" style="display:none;"><i class="fa-regular fa-compass"></i></div>
+                    </div>
+                    <span>Safari</span>
+                </div>
+                <!-- Camera -->
+                <div class="app" data-app="camera">
+                    <div class="app-icon">
+                        <img src="assets/icons/camera.jpg" alt="Camera" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-camera" style="display:none;"><i class="fa-solid fa-camera"></i></div>
+                    </div>
+                    <span>Camera</span>
+                </div>
+                <!-- Settings -->
+                <div class="app" data-app="settings">
+                    <div class="app-icon">
+                        <img src="assets/icons/setting.jpg" alt="Settings" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-settings" style="display:none;"><i class="fa-solid fa-gear"></i></div>
+                    </div>
+                    <span>Settings</span>
+                </div>
+                <!-- Notes App -->
+                <div class="app" data-app="notes" onclick="window.location.href='note.html'" style="cursor: pointer;">
+                    <div class="app-icon">
+                        <img src="assets/icons/note.jpg" alt="Notes" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-notes" style="display:none;"><i class="fa-solid fa-note-sticky"></i></div>
+                    </div>
+                    <span>Notes</span>
+                </div>
+                <!-- Photos -->
+                <div class="app" data-app="photos" onclick="window.location.href='photo.html'" style="cursor: pointer;">
+                    <div class="app-icon">
+                        <img src="assets/icons/Photo.jpg" alt="Photos" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-photos" style="display:none;"><i class="fa-solid fa-photo-film"></i></div>
+                    </div>
+                    <span>Photos</span>
+                </div>
+                <!-- LINE -->
+                <div class="app" data-app="line" onclick="window.location.href='Line.html'" style="cursor: pointer;">
+                    <div class="app-icon">
+                        <img src="assets/icons/Line.png" alt="LINE" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-line" style="display:none;"><i class="fa-solid fa-comment-dots"></i></div>
+                    </div>
+                    <span>LINE</span>
+                </div>
+                <!-- YouTube -->
+                <div class="app" data-app="youtube">
+                    <div class="app-icon">
+                        <img src="assets/icons/YouTube.jpg" alt="YouTube" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-youtube" style="display:none;"><i class="fa-brands fa-youtube"></i></div>
+                    </div>
+                    <span>YouTube</span>
+                </div>
+                <!-- Weather -->
+                <div class="app" data-app="weather">
+                    <div class="app-icon">
+                        <img src="assets/icons/Weather.jpg" alt="Weather" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon weather-grad" style="display:none;"><i class="fa-solid fa-cloud-sun"></i></div>
+                    </div>
+                    <span>Weather</span>
+                </div>
+                <!-- Music -->
+                <div class="app" data-app="music">
+                    <div class="app-icon">
+                        <img src="assets/icons/Music.jpg" alt="Music" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon music-grad" style="display:none;"><i class="fa-solid fa-music"></i></div>
+                    </div>
+                    <span>Music</span>
+                </div>
+                <!-- Webtoon -->
+                <div class="app" data-app="webtoon">
+                    <div class="app-icon">
+                        <!-- เพิ่ม style ซูมรูปเข้าไปตรงนี้ -->
+                        <img src="assets/icons/webtoon.jpg" alt="Webtoon" class="app-icon-img" style="transform: scale(1.35);" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon" style="display:none; background-color: #00dc64; color: white;">
+                            <i class="fa-regular fa-face-smile"></i>
+                        </div>
+                    </div>
+                    <span>Webtoon</span>
+                </div>
+                <!-- ROV -->
+                <div class="app" data-app="rov">
+                    <div class="app-icon">
+                        <img src="assets/icons/rov.jpg" alt="ROV" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon" style="display:none; background-color: #1a1a1a; color: #f5c518;">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                    </div>
+                    <span>ROV</span>
+                </div>
+                <!-- Discord -->
+                <div class="app" data-app="discord" style="grid-column: 4;">
+                    <div class="app-icon">
+                        <img src="assets/icons/discord.png" alt="Discord" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon" style="display:none; background-color: #5865F2; color: white;">
+                            <i class="fa-brands fa-discord"></i>
+                        </div>
+                    </div>
+                    <span>Discord</span>
+                </div>
+            </div>
+
+            <!-- Search Pill Bar -->
+            <div class="search-pill">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>Search</span>
+            </div>
+
+            <!-- Dock -->
+            <div class="dock">
+                <div class="app" data-app="phone">
+                    <div class="app-icon">
+                        <img src="assets/icons/Phone.jpg" alt="Phone" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-phone" style="display:none;"><i class="fa-solid fa-phone"></i></div>
+                    </div>
+                </div>
+                <div class="app" data-app="safari">
+                    <div class="app-icon">
+                        <img src="assets/icons/safari.jpg" alt="Safari" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-safari" style="display:none;"><i class="fa-regular fa-compass"></i></div>
+                    </div>
+                </div>
+                <div class="app" data-app="line" onclick="window.location.href='Line.html'" style="cursor: pointer;">
+                    <div class="app-icon">
+                        <img src="assets/icons/Line.png" alt="LINE" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-line" style="display:none;"><i class="fa-solid fa-comment-dots"></i></div>
+                    </div>
+                </div>
+                <div class="app" data-app="youtube">
+                    <div class="app-icon">
+                        <img src="assets/icons/YouTube.jpg" alt="YouTube" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="fallback-icon icon-youtube" style="display:none;"><i class="fa-brands fa-youtube"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 5. Notification Center Overlay -->
+        <div class="notification-center-overlay" id="nc-overlay">
+            <div class="lock-header">
+                <div class="time" id="nc-time">14:22</div>
+                <div class="date" id="nc-date">Sunday, October 25</div>
+            </div>
+            <div class="notifications-container">
+                <div class="notification" onclick="window.location.href='LineJohan.html'" style="cursor: pointer;">
+                    <div class="notif-header">
+                        <div class="notif-app-icon"><i class="fa-brands fa-line"></i></div>
+                        <span class="notif-app-name">LINE</span>
+                        <span class="notif-time">1m ago</span>
+                    </div>
+                    <div class="notif-body">
+                        <div class="notif-title">Johan</div>
+                        <div class="notif-message">Sent you a message.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="home-indicator" id="nc-indicator"></div>
+        </div>
+
+        <!-- 6. Control Center Overlay -->
+        <div class="control-center-overlay" id="cc-overlay">
+          <div class="control-center">
+                    <!-- แถวที่ 1 & 2 (ส่วนเชื่อมต่อ และ เพลงที่ปิดอยู่) -->
+                    <div class="module squircle-2x2 network-group">
+                        <div class="icon-btn inactive"><i class="fa-solid fa-plane"></i></div>
+                        <div class="icon-btn active-blue"><i class="fa-solid fa-satellite-dish"></i></div>
+                        <div class="icon-btn active-blue"><i class="fa-solid fa-wifi"></i></div>
+                        <div class="icon-btn active-blue"><i class="fa-brands fa-bluetooth-b"></i></div>
+                    </div>
+                    
+                    <div class="module squircle-2x2 media-empty">
+                        <div class="media-empty-top">
+                            <i class="fa-solid fa-podcast"></i>
+                        </div>
+                        <div class="media-empty-center">
+                            <i class="fa-solid fa-music"></i>
+                            <span>Not Playing</span>
+                        </div>
+                    </div>
+
+                    <!-- แถวที่ 3 (ปุ่มล็อคหมุนจอพื้นแดง และสะท้อนหน้าจอ) -->
+                    <div class="module circle" style="background: #ff3b30; color: white;"><i class="fa-solid fa-lock"></i></div>
+                    <div class="module circle inactive"><i class="fa-solid fa-clone"></i></div>
+
+                    <!-- แถบเลื่อน แสง/เสียง (กินพื้นที่แถวที่ 3 & 4) -->
+                    <div class="module pill-1x2 slider brightness" id="brightness-slider">
+                        <div class="slider-fill" id="brightness-fill" style="height: 50%;"></div>
+                        <i class="fa-regular fa-sun slider-icon"></i>
+                    </div>
+                    <div class="module pill-1x2 slider volume" id="volume-slider">
+                        <div class="slider-fill" id="volume-fill" style="height: 50%;"></div>
+                        <i class="fa-solid fa-volume-high slider-icon"></i>
+                    </div>
+
+                    <!-- แถวที่ 4 (Focus) -->
+                    <div class="module pill-2x1 focus-group" style="justify-content: space-between; padding: 0 16px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="focus-icon"><i class="fa-solid fa-moon"></i></div>
+                            <span style="font-weight: 500; font-size: 15px;">Focus</span>
+                        </div>
+                        <i class="fa-solid fa-ellipsis" style="opacity: 0.5;"></i>
+                    </div>
+
+                    <!-- แถวที่ 5 (ประตูบ้าน, ไฟฉาย, รีโมท Apple TV) -->
+                    <div class="module pill-2x1 home-group">
+                        <div class="home-icon"><i class="fa-solid fa-lock"></i></div>
+                        <div class="home-text">
+                            <span class="home-title">Entrance</span>
+                            <span class="home-desc">Door Locked</span>
+                        </div>
+                    </div>
+                    <div class="module circle inactive"><i class="fa-solid fa-flashlight"></i></div>
+                    <div class="module circle inactive"><i class="fa-solid fa-tv"></i></div>
+
+                    <!-- แถวที่ 6 (ลำโพงห้องนอน, เครื่องคิดเลข, สแกน QR) -->
+                    <div class="module pill-2x1 home-group">
+                        <div class="home-icon"><i class="fa-solid fa-volume-low"></i></div>
+                        <div class="home-text">
+                            <span class="home-title">Bedroom</span>
+                            <span class="home-desc">Speaker Not Playing</span>
+                        </div>
+                    </div>
+                    <div class="module circle inactive"><i class="fa-solid fa-calculator"></i></div>
+                    <div class="module circle inactive"><i class="fa-solid fa-qrcode"></i></div>
+
+                    <!-- แถวที่ 7 (อัดหน้าจอ, กล้องถ่ายรูป) -->
+                    <div class="module circle inactive"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="module circle inactive"><i class="fa-solid fa-camera"></i></div>
+                </div>
+
+                <!-- แถบไอคอนเมนูด้านขวา -->
+                <div class="cc-sidebar">
+                    <i class="fa-solid fa-heart active-page"></i>
+                    <i class="fa-solid fa-house"></i>
+                    <i class="fa-solid fa-signal"></i>
+                </div>
+            <div class="home-indicator" id="cc-indicator"></div>
+        </div>
+
+        <!-- Global Home Indicator Bar -->
+        <div class="home-indicator" id="home-indicator"></div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

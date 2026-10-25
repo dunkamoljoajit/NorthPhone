@@ -1,0 +1,37 @@
+/* =========================================
+   responsive.css - สำหรับปรับขนาด iPhone Simulator
+========================================= */
+
+/* 1. Responsive ขนาดกลาง (Medium Devices) 
+   เช่น หน้าจอโน้ตบุ๊กขนาดเล็ก, แท็บเล็ตแนวนอน (max-height: 900px หรือ max-width: 1024px) */
+@media screen and (max-height: 900px), screen and (max-width: 1024px) {
+    .iphone {
+        transform: scale(0.85); /* ย่อขนาดลงเหลือ 85% */
+        transform-origin: center center;
+    }
+}
+
+/* 2. Responsive ขนาดกลาง-เล็ก (Tablet Portrait)
+   เช่น หน้าจอแท็บเล็ตแนวตั้ง (max-height: 800px หรือ max-width: 768px) */
+@media screen and (max-height: 800px), screen and (max-width: 768px) {
+    .iphone {
+        transform: scale(0.75); /* ย่อขนาดลงเหลือ 75% */
+        transform-origin: center center;
+    }
+}
+
+/* 3. Responsive ขนาดเล็ก (Mobile Devices)
+   สำหรับกรณีที่เปิดดูในมือถือจริงๆ ให้มันซูมพอดีความกว้างจอและลบขอบดำทิ้ง */
+@media screen and (max-width: 430px) {
+    body {
+        overflow: hidden; /* ซ่อนแถบเลื่อนของเว็บ */
+    }
+    .iphone {
+        /* คำนวณสเกลให้พอดีความกว้างหน้าจอมือถือ 100% */
+        transform: scale(calc(100vw / 400)); 
+        transform-origin: top center;
+        border: none; /* เอาขอบหนาๆ ของ iPhone ออก */
+        border-radius: 0; /* เอาขอบมนออกให้เต็มจอพอดี */
+        margin-top: 0;
+    }
+}

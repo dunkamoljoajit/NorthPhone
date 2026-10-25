@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE - iOS 18</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="responsive.css">
+    <style>
+        /* --- Reset & Base Settings --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
+            user-select: none; -webkit-user-select: none;
+        }
+        body {
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background-color: #0b0b0c;
+        }
+
+        /* --- iPhone Frame --- */
+        .iphone {
+            width: 393px; height: 852px; background-color: #000000;
+            border-radius: 54px; position: relative;
+            border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85);
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+
+        /* --- Status Bar --- */
+        .status-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 28px 10px; color: white; font-size: 15px;
+            font-weight: 600; z-index: 30; background-color: #111111;
+        }
+        .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+
+        /* --- LINE Main Container --- */
+        .line-container {
+            flex: 1; display: flex; flex-direction: column;
+            background-color: #000000; overflow: hidden;
+        }
+
+        /* --- Header --- */
+        .line-header {
+            background-color: #111111; padding: 10px 18px 12px;
+            border-bottom: 0.5px solid #222222;
+        }
+        .header-top {
+            display: flex; justify-content: space-between; align-items: center;
+            color: white; margin-bottom: 12px;
+        }
+        .header-top h1 { font-size: 22px; font-weight: 700; margin-left: 8px; }
+        .back-btn { 
+            color: #ffffff; font-size: 20px; cursor: pointer; text-decoration: none; 
+            display: flex; align-items: center;
+        }
+        .header-icons { display: flex; gap: 18px; font-size: 20px; color: #ffffff; }
+        
+        .search-bar {
+            background: #222222; border-radius: 8px; padding: 8px 12px;
+            display: flex; align-items: center; gap: 8px; color: #8e8e93; font-size: 15px;
+        }
+
+        /* --- Chat List --- */
+        .chat-list {
+            flex: 1; overflow-y: auto; padding-bottom: 20px;
+        }
+        .chat-item {
+            display: flex; align-items: center; padding: 12px 18px;
+            background: #000000; transition: background 0.2s; cursor: pointer;
+        }
+        .chat-item:active { background: #1c1c1e; }
+        
+        .chat-avatar {
+            width: 52px; height: 52px; border-radius: 50%;
+            object-fit: cover; margin-right: 14px; background: #333;
+        }
+        .chat-info {
+            flex: 1; display: flex; flex-direction: column; justify-content: center;
+            border-bottom: 0.5px solid #222222; padding-bottom: 12px; padding-top: 2px;
+            height: 100%;
+        }
+        .chat-name-row {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;
+        }
+        .chat-name { color: #ffffff; font-size: 16px; font-weight: 500; }
+        .chat-time { color: #8e8e93; font-size: 12px; }
+        
+        .chat-msg-row {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .chat-msg {
+            color: #8e8e93; font-size: 14px; white-space: nowrap;
+            overflow: hidden; text-overflow: ellipsis; max-width: 220px;
+        }
+        .unread-badge {
+            background: #06C755; color: white; font-size: 11px; font-weight: bold;
+            height: 20px; min-width: 20px; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center; padding: 0 6px;
+        }
+
+        /* --- Bottom Tab Bar --- */
+        .tab-bar {
+            display: flex; justify-content: space-around; align-items: center;
+            background: #111111; padding: 10px 0 24px; border-top: 0.5px solid #222222;
+        }
+        .tab-item {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: #555555; font-size: 10px; cursor: pointer;
+        }
+        .tab-item.active { color: #ffffff; }
+        .tab-item i { font-size: 22px; }
+
+        /* --- Home Indicator --- */
+        .home-indicator {
+            position: absolute; bottom: 8px; left: 50%;
+            transform: translateX(-50%); width: 134px; height: 5px;
+            background-color: white; border-radius: 10px; cursor: pointer; z-index: 60;
+        }
+        a.home-indicator { display: block; text-decoration: none; }
+        
+        /* เอาเส้นใต้ของแชทสุดท้ายออก */
+        .chat-item:last-child .chat-info { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="iphone">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-left" id="clock-time">16:42</div>
+            <div class="status-right">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- LINE Container -->
+        <div class="line-container">
+            
+            <!-- Header -->
+            <div class="line-header">
+                <div class="header-top">
+                    <div style="display: flex; align-items: center;">
+                        <a href="index.html#home" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+                        <h1>Chats</h1>
+                    </div>
+                    <div class="header-icons">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <i class="fa-solid fa-folder-plus"></i>
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                </div>
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Search</span>
+                </div>
+            </div>
+
+            <!-- Chat List -->
+            <div class="chat-list">
+                
+                <!-- Chat: Johan (ลิงก์ไป LineJohan.html) -->
+                <div class="chat-item" onclick="window.location.href='LineJohan.html'">
+                    <img src="https://i.pinimg.com/1200x/8d/bb/b8/8dbbb882929048c327e853120a4b5487.jpg" alt="Johan" class="chat-avatar">
+                    <div class="chat-info">
+                        <div class="chat-name-row">
+                            <span class="chat-name">Johan</span>
+                            <span class="chat-time">14:22</span>
+                        </div>
+                        <div class="chat-msg-row">
+                            <span class="chat-msg">Sent you a message.</span>
+                            <div class="unread-badge">1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat: ไอ้พี่อาทิตย์ -->
+                <div class="chat-item" onclick="window.location.href='LineArthit.html'">
+                    <img src="https://i.pinimg.com/736x/cc/73/5b/cc735b341c9761566845e13502893e7b.jpg" alt="พี่อาทิตย์" class="chat-avatar">
+                    <div class="chat-info">
+                        <div class="chat-name-row">
+                            <span class="chat-name">ไอ้พี่อาทิตย์</span>
+                            <span class="chat-time">Yesterday</span>
+                        </div>
+                        <div class="chat-msg-row">
+                            <span class="chat-msg">ไปทำไรให้พี่โจบล็อกอีกล่ะ</span>
+                            <!-- ไม่มี unread badge -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat: 4 จิ๋ว -->
+                <div class="chat-item" onclick="window.location.href='Line4Jiw.html'">
+                    <img src="https://i.pinimg.com/1200x/b2/74/4a/b2744a8447eb64d5e04f6c4c4d3aeefc.jpg" alt="4 จิ๋ว" class="chat-avatar">
+                    <div class="chat-info">
+                        <div class="chat-name-row">
+                            <span class="chat-name">4 จิ๋ว 🐣</span>
+                            <span class="chat-time">Tuesday</span>
+                        </div>
+                        <div class="chat-msg-row">
+                            <span class="chat-msg"></span>
+                            <!-- ไม่มี unread badge -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Tab Bar -->
+            <div class="tab-bar">
+                <div class="tab-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Home</span>
+                </div>
+                <div class="tab-item active">
+                    <i class="fa-solid fa-comment"></i>
+                    <span>Chats</span>
+                </div>
+                <div class="tab-item">
+                    <i class="fa-brands fa-envira"></i>
+                    <span>VOOM</span>
+                </div>
+                <div class="tab-item">
+                    <i class="fa-solid fa-newspaper"></i>
+                    <span>Today</span>
+                </div>
+                <div class="tab-item">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Wallet</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Home Bar -->
+        <a href="index.html#home" class="home-indicator"></a>
+    </div>
+
+    <script>
+        // นาฬิกา
+        function updateClock() {
+            const now = new Date();
+            let h = now.getHours().toString().padStart(2, '0');
+            let m = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock-time').textContent = `${h}:${m}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
