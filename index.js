@@ -70,6 +70,160 @@ function playUnlockSound() {
     }
 }
 
+// --- Multi-language System (ระบบแปลภาษา 5 ภาษา + Safari Action Sheet) ---
+const translations = {
+    th: {
+        translate_label: "แปลภาษา",
+        translate_sheet_title: "แปลภาษาหน้าเว็บ",
+        swipe_unlock: "ปัดขึ้นเพื่อปลดล็อค",
+        passcode_title: "ป้อนรหัสผ่าน",
+        cancel: "ยกเลิก",
+        search: "ค้นหา",
+        app_phone: "โทรศัพท์",
+        app_messages: "ข้อความ",
+        app_camera: "กล้อง",
+        app_settings: "ตั้งค่า",
+        app_notes: "โน้ต",
+        app_photos: "รูปภาพ",
+        app_weather: "สภาพอากาศ",
+        app_music: "เพลง",
+        notif_johan: "ส่งข้อความถึงคุณ",
+        not_playing: "ไม่ได้เล่นอยู่",
+        focus: "โหมดโฟกัส",
+        entrance: "ทางเข้า",
+        door_locked: "ประตูถูกล็อคแล้ว",
+        bedroom: "ห้องนอน",
+        speaker_off: "ลำโพงไม่ได้เปิด"
+    },
+    en: {
+        translate_label: "Translate",
+        translate_sheet_title: "Translate Page",
+        swipe_unlock: "Swipe up to unlock",
+        passcode_title: "Enter Passcode",
+        cancel: "Cancel",
+        search: "Search",
+        app_phone: "Phone",
+        app_messages: "Messages",
+        app_camera: "Camera",
+        app_settings: "Settings",
+        app_notes: "Notes",
+        app_photos: "Photos",
+        app_weather: "Weather",
+        app_music: "Music",
+        notif_johan: "Sent you a message.",
+        not_playing: "Not Playing",
+        focus: "Focus",
+        entrance: "Entrance",
+        door_locked: "Door Locked",
+        bedroom: "Bedroom",
+        speaker_off: "Speaker Not Playing"
+    },
+    ja: {
+        translate_label: "翻訳",
+        translate_sheet_title: "Webページを翻訳",
+        swipe_unlock: "スワイプして解除",
+        passcode_title: "パスコードを入力",
+        cancel: "キャンセル",
+        search: "検索",
+        app_phone: "電話",
+        app_messages: "メッセージ",
+        app_camera: "カメラ",
+        app_settings: "設定",
+        app_notes: "メモ",
+        app_photos: "写真",
+        app_weather: "天気",
+        app_music: "ミュージック",
+        notif_johan: "メッセージを送信しました",
+        not_playing: "停止中",
+        focus: "集中モード",
+        entrance: "玄関",
+        door_locked: "施錠済み",
+        bedroom: "ベッドルーム",
+        speaker_off: "スピーカー停止中"
+    },
+    ko: {
+        translate_label: "번역",
+        translate_sheet_title: "웹페이지 번역",
+        swipe_unlock: "위로 쓸어올려서 잠금 해제",
+        passcode_title: "암호 입력",
+        cancel: "취소",
+        search: "검색",
+        app_phone: "전화",
+        app_messages: "메시지",
+        app_camera: "카메라",
+        app_settings: "설정",
+        app_notes: "메모",
+        app_photos: "사진",
+        app_weather: "날씨",
+        app_music: "음악",
+        notif_johan: "메시지를 보냈습니다.",
+        not_playing: "재생 중이 아님",
+        focus: "집중 모드",
+        entrance: "현관",
+        door_locked: "문 잠김",
+        bedroom: "침실",
+        speaker_off: "스피커 중지됨"
+    },
+    zh: {
+        translate_label: "翻译",
+        translate_sheet_title: "翻译网页",
+        swipe_unlock: "向上轻滑以解锁",
+        passcode_title: "输入密码",
+        cancel: "取消",
+        search: "搜索",
+        app_phone: "电话",
+        app_messages: "信息",
+        app_camera: "相机",
+        app_settings: "设置",
+        app_notes: "备忘录",
+        app_photos: "照片",
+        app_weather: "天气",
+        app_music: "音乐",
+        notif_johan: "向您发送了一条消息",
+        not_playing: "未在播放",
+        focus: "专注模式",
+        entrance: "入口",
+        door_locked: "门已锁",
+        bedroom: "卧室",
+        speaker_off: "扬声器未播放"
+    }
+};
+
+// ฟังก์ชันควบคุม Action Sheet แปลภาษาแบบ Safari
+function openTranslateModal() {
+    const modal = document.getElementById('translate-modal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeTranslateModal(event) {
+    const modal = document.getElementById('translate-modal');
+    if (modal) modal.classList.remove('active');
+}
+
+function selectLanguage(lang) {
+    changeLanguage(lang);
+    closeTranslateModal();
+}
+
+function changeLanguage(lang) {
+    localStorage.setItem('selectedLanguage', lang);
+    
+    // แสดงเครื่องหมายถูกที่ตัวเลือกภาษาปัจจุบัน
+    document.querySelectorAll('.lang-option-item').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    const activeOpt = document.getElementById(`opt-${lang}`);
+    if (activeOpt) activeOpt.classList.add('selected');
+
+    // แปลข้อความตาม data-key
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (translations[lang] && translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const lockScreen = document.getElementById('lock-screen');
     const passcodeScreen = document.getElementById('passcode-screen');
@@ -79,8 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const wallpaper = document.getElementById('wallpaper');
     const mainLock = document.getElementById('main-lock');
     const appWindow = document.getElementById('app-window');
-    const appTitle = document.getElementById('app-window-title');
-    const appContent = document.getElementById('app-window-content');
+
+    // โหลดภาษาล่าสุดที่เลือกไว้ (เริ่มต้นเป็น 'th')
+    const savedLang = localStorage.getItem('selectedLanguage') || 'th';
+    changeLanguage(savedLang);
 
     // 1. Clock Engine
     function updateClock() {
@@ -157,6 +313,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 wallpaper.style.backgroundImage = "url('https://i.pinimg.com/736x/a0/79/78/a07978b4f404bae022234ac944cce65c.jpg')"; 
             }
             if (homeScreen) homeScreen.classList.add('active');
+
+            // เด้งหน้าต่างแปลภาษาให้อัตโนมัติหลังจากปลดล็อกสำเร็จ (หน่วงเวลา 0.5 วินาที)
+            setTimeout(() => {
+                openTranslateModal();
+            }, 500);
+
         } else {
             if (dotsContainer) dotsContainer.classList.add('shake');
             setTimeout(() => {

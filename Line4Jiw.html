@@ -7,96 +7,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="responsive.css">
     <style>
-        /* --- Reset & Base Settings --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; user-select: none; }
         body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0b0b0c; }
-
-        /* --- iPhone Frame --- */
-        .iphone {
-            width: 393px; height: 852px; background-color: #000000;
-            border-radius: 54px; position: relative; border: 4px solid #2d2d30;
-            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden;
-            display: flex; flex-direction: column;
-        }
-
-        /* --- Status Bar --- */
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600;
-            background-color: #111111; z-index: 10;
-        }
+        .iphone { width: 393px; height: 852px; background-color: #000000; border-radius: 54px; position: relative; border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden; display: flex; flex-direction: column; }
+        .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600; background-color: #111111; z-index: 10; }
         .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-
-        /* --- Chat Header --- */
-        .chat-header {
-            background-color: #111111; padding: 10px 18px 12px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 0.5px solid #222222; z-index: 10;
-        }
+        .chat-header { background-color: #111111; padding: 10px 18px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid #222222; z-index: 10; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .back-btn { color: #ffffff; font-size: 22px; text-decoration: none; cursor: pointer; }
         .chat-title { color: white; font-size: 17px; font-weight: 600; }
         .header-icons { display: flex; gap: 18px; font-size: 18px; color: #ffffff; }
-
-        /* --- Chat Area --- */
-        .chat-container {
-            flex: 1; padding: 20px 15px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 15px;
-            background-color: #0a0a0c;
-            
-            /* ซ่อน Scrollbar */
-            -ms-overflow-style: none; 
-            scrollbar-width: none;
-        }
-        .chat-container::-webkit-scrollbar {
-            display: none; 
-        }
-        
+        .chat-container { flex: 1; padding: 20px 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background-color: #0a0a0c; -ms-overflow-style: none; scrollbar-width: none; }
+        .chat-container::-webkit-scrollbar { display: none; }
         .message-wrapper { display: flex; flex-direction: column; max-width: 75%; }
         .message-wrapper.received { align-self: flex-start; }
         .message-wrapper.sent { align-self: flex-end; align-items: flex-end; }
-
-        /* ชื่อคนส่งในแชทกลุ่ม */
-        .sender-name {
-            font-size: 12px; color: #8e8e93; margin-bottom: 4px; margin-left: 6px;
-        }
-
-        .bubble {
-            padding: 12px 16px; font-size: 15px; line-height: 1.4;
-            border-radius: 20px; color: white; word-wrap: break-word;
-        }
-        .received .bubble {
-            background-color: #262628;
-            border-top-left-radius: 4px;
-        }
-        .sent .bubble {
-            background-color: #06C755;
-            border-top-right-radius: 4px;
-        }
-        
+        .sender-name { font-size: 12px; color: #8e8e93; margin-bottom: 4px; margin-left: 6px; }
+        .bubble { padding: 12px 16px; font-size: 15px; line-height: 1.4; border-radius: 20px; color: white; word-wrap: break-word; }
+        .received .bubble { background-color: #262628; border-top-left-radius: 4px; }
+        .sent .bubble { background-color: #06C755; border-top-right-radius: 4px; }
         .msg-time { font-size: 11px; color: #8e8e93; margin-top: 4px; padding: 0 4px; }
-
-        /* --- Input Area --- */
-        .chat-input-area {
-            background-color: #111111; padding: 10px 15px 25px;
-            display: flex; align-items: center; gap: 12px; border-top: 0.5px solid #222222;
-        }
+        .chat-input-area { background-color: #111111; padding: 10px 15px 25px; display: flex; align-items: center; gap: 12px; border-top: 0.5px solid #222222; }
         .input-icon { color: #8e8e93; font-size: 20px; cursor: pointer; }
-        .input-box {
-            flex: 1; background-color: #222222; color: white; border: none;
-            border-radius: 20px; padding: 10px 15px; font-size: 15px; outline: none;
-        }
-        
-        /* --- Home Indicator --- */
-        .home-indicator {
-            position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-            width: 134px; height: 5px; background-color: white; border-radius: 10px; z-index: 20;
-        }
+        .input-box { flex: 1; background-color: #222222; color: white; border: none; border-radius: 20px; padding: 10px 15px; font-size: 15px; outline: none; }
+        .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: white; border-radius: 10px; z-index: 20; }
     </style>
 </head>
 <body>
     <div class="iphone">
-        <!-- Status Bar -->
         <div class="status-bar">
             <div id="clock-time">16:42</div>
             <div class="status-right">
@@ -106,107 +44,67 @@
             </div>
         </div>
 
-        <!-- Header -->
         <div class="chat-header">
             <div class="header-left">
-                <!-- กดปุ่มนี้จะกลับไปหน้า Line.html -->
                 <a href="Line.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
-                <span class="chat-title">4 จิ๋ว 🐣</span>
+                <span class="chat-title" data-key="title_4jiw">4 จิ๋ว 🐣</span>
             </div>
-            <div class="header-icons">
-                <i class="fa-solid fa-phone"></i>
-                <i class="fa-solid fa-bars"></i>
-            </div>
+            <div class="header-icons"><i class="fa-solid fa-phone"></i><i class="fa-solid fa-bars"></i></div>
         </div>
 
-        <!-- Chat History -->
         <div class="chat-container">
-            
-            <div style="text-align: center; color: #8e8e93; font-size: 11px; margin: 5px 0;">Tuesday</div>
+            <div style="text-align: center; color: #8e8e93; font-size: 11px; margin: 5px 0;" data-key="tuesday">Tuesday</div>
 
-            <!-- นอร์ธเปิดประเด็นบ่นเรื่องเรียน -->
-            <div class="message-wrapper sent">
-                <div class="bubble">พวกมึงงงงง อาจารย์สั่งงานเหมือนพรุ่งนี้โลกจะแตก! กูเหนื่อยยยย ร่างจะแหลกละ!</div>
-                <div class="msg-time">09:15</div>
-            </div>
+            <div class="message-wrapper sent"><div class="bubble" data-key="g1">พวกมึงงงงง อาจารย์สั่งงานเหมือนพรุ่งนี้โลกจะแตก! กูเหนื่อยยยย ร่างจะแหลกละ!</div><div class="msg-time">09:15</div></div>
             
-            <!-- ดาวตกตอบ -->
             <div class="message-wrapper received">
-                <div class="sender-name">ดาวตก</div>
-                <div class="bubble">เราก็เห็นนอร์ธบ่นอย่างงี้ทุกที ไม่เหนื่อยบ้างเหรอ</div>
+                <div class="sender-name" data-key="name_daotok">ดาวตก</div>
+                <div class="bubble" data-key="g2">เราก็เห็นนอร์ธบ่นอย่างงี้ทุกที ไม่เหนื่อยบ้างเหรอ</div>
                 <div class="msg-time">09:16</div>
             </div>
 
-            <!-- เตอร์ผสมโรง -->
             <div class="message-wrapper received">
-                <div class="sender-name">เตอร์</div>
-                <div class="bubble">พี่พุ่งใต้พูดถูกใจว่ะ เยี่ยม ๆ</div>
+                <div class="sender-name" data-key="name_ter">เตอร์</div>
+                <div class="bubble" data-key="g3">พี่พุ่งใต้พูดถูกใจว่ะ เยี่ยม ๆ</div>
                 <div class="msg-time">09:17</div>
             </div>
 
-            <!-- นอร์ธ -->
-            <div class="message-wrapper sent">
-                <div class="bubble">มึงงงงงเนี่ยน่ะเตอร์ แล้วแมวไปไหนอ่ะ</div>
-                <div class="msg-time">09:18</div>
-            </div>
+            <div class="message-wrapper sent"><div class="bubble" data-key="g4">มึงงงงงเนี่ยน่ะเตอร์ แล้วแมวไปไหนอ่ะ</div><div class="msg-time">09:18</div></div>
 
-            <!-- เตอร์ตอบ -->
             <div class="message-wrapper received">
-                <div class="sender-name">เตอร์</div>
-                <div class="bubble">อยู่กับพี่ฟ้าล่ะมั่งหรือไม่ก็ทำงาน ใครจะว่างเหมือนมึง</div>
+                <div class="sender-name" data-key="name_ter">เตอร์</div>
+                <div class="bubble" data-key="g5">อยู่กับพี่ฟ้าล่ะมั่งหรือไม่ก็ทำงาน ใครจะว่างเหมือนมึง</div>
                 <div class="msg-time">09:19</div>
             </div>
 
-            <!-- นอร์ธวีน -->
-            <div class="message-wrapper sent">
-                <div class="bubble">เออ! แม่งบ้าไปแล้ว! ละนี่กูหิวข้าวมากกกก แต่ไม่มีกะจิตกะใจจะแดก เพราะเพิ่งโดนร้านพรีของในทวิตโกงเงินไป! โมโหโว้ยยยย จะวีนนนน!!! 🤬</div>
-                <div class="msg-time">09:20</div>
-            </div>
+            <div class="message-wrapper sent"><div class="bubble" data-key="g6">เออ! แม่งบ้าไปแล้ว! ละนี่กูหิวข้าวมากกกก แต่ไม่มีกะจิตกะใจจะแดก เพราะเพิ่งโดนร้านพรีของในทวิตโกงเงินไป! โมโหโว้ยยยย จะวีนนนน!!! 🤬</div><div class="msg-time">09:20</div></div>
 
-            <!-- เตอร์ซ้ำเติม -->
             <div class="message-wrapper received">
-                <div class="sender-name">เตอร์</div>
-                <div class="bubble">เห็นแก่ของถูกแล้วอ่ะดิ มีผัวรวยแต่ขี้งกน่ะมึงน่ะ</div>
+                <div class="sender-name" data-key="name_ter">เตอร์</div>
+                <div class="bubble" data-key="g7">เห็นแก่ของถูกแล้วอ่ะดิ มีผัวรวยแต่ขี้งกน่ะมึงน่ะ</div>
                 <div class="msg-time">09:21</div>
             </div>
 
-            <!-- นอร์ธเถียง -->
-            <div class="message-wrapper sent">
-                <div class="bubble">ถือว่าช่วยพี่โจประหยัดไง มึงเนี่ยน่ะ</div>
-                <div class="msg-time">09:22</div>
-            </div>
+            <div class="message-wrapper sent"><div class="bubble" data-key="g8">ถือว่าช่วยพี่โจประหยัดไง มึงเนี่ยน่ะ</div><div class="msg-time">09:22</div></div>
 
-            <!-- ดาวตก -->
             <div class="message-wrapper received">
-                <div class="sender-name">ดาวตก</div>
-                <div class="bubble">พี่โจคงไม่อยากให้นอร์ธประหยัดน่ะเราว่า</div>
+                <div class="sender-name" data-key="name_daotok">ดาวตก</div>
+                <div class="bubble" data-key="g9">พี่โจคงไม่อยากให้นอร์ธประหยัดน่ะเราว่า</div>
                 <div class="msg-time">09:23</div>
             </div>
 
-            <!-- ไต้ฝุ่น -->
             <div class="message-wrapper received">
-                <div class="sender-name">ไต้ฝุ่น</div>
-                <div class="bubble">นั่นดิ วัน ๆ นอร์ธเป็นอะไรก็ไม่รู้</div>
+                <div class="sender-name" data-key="name_taifoon">ไต้ฝุ่น</div>
+                <div class="bubble" data-key="g10">นั่นดิ วัน ๆ นอร์ธเป็นอะไรก็ไม่รู้</div>
                 <div class="msg-time">09:24</div>
             </div>
 
-            <!-- นอร์ธคอมโบ: หวย + แสตมป์เซเว่น -->
-            <div class="message-wrapper sent">
-                <div class="bubble">หุบปากแล้วแมว! กูเลยเอาเงินที่เหลือไปทุ่มซื้อหวยละ งวดนี้กูต้องรวย! 🙏✨</div>
-                <div class="msg-time">09:25</div>
-            </div>
-            
-            <div class="message-wrapper sent">
-                <div class="bubble">อ้อ ละใครเข้าเซเว่นอย่าลืมเก็บแสตมป์มาให้กูด้วยนะ กูจะเอาไปแลกของ! ห้ามลืมนะเว้ยยยย ขาดอีกนิดเดียว!</div>
-                <div class="msg-time">09:26</div>
-            </div>
+            <div class="message-wrapper sent"><div class="bubble" data-key="g11">หุบปากแล้วแมว! กูเลยเอาเงินที่เหลือไปทุ่มซื้อหวยละ งวดนี้กูต้องรวย! 🙏✨</div><div class="msg-time">09:25</div></div>
+            <div class="message-wrapper sent"><div class="bubble" data-key="g12">อ้อ ละใครเข้าเซเว่นอย่าลืมเก็บแสตมป์มาให้กูด้วยนะ กูจะเอาไปแลกของ! ห้ามลืมนะเว้ยยยย ขาดอีกนิดเดียว!</div><div class="msg-time">09:26</div></div>
         </div>
 
-        <!-- Input Area -->
         <div class="chat-input-area">
-            <i class="fa-solid fa-plus input-icon"></i>
-            <i class="fa-solid fa-camera input-icon"></i>
-            <i class="fa-regular fa-image input-icon"></i>
+            <i class="fa-solid fa-plus input-icon"></i><i class="fa-solid fa-camera input-icon"></i><i class="fa-regular fa-image input-icon"></i>
             <input type="text" class="input-box" placeholder="Aa">
             <i class="fa-solid fa-microphone input-icon"></i>
         </div>
@@ -215,13 +113,56 @@
     </div>
 
     <script>
+        const translations = {
+            th: {
+                title_4jiw: "4 จิ๋ว 🐣", tuesday: "วันอังคาร", name_daotok: "ดาวตก", name_ter: "เตอร์", name_taifoon: "ไต้ฝุ่น",
+                g1: "พวกมึงงงงง อาจารย์สั่งงานเหมือนพรุ่งนี้โลกจะแตก! กูเหนื่อยยยย ร่างจะแหลกละ!", g2: "เราก็เห็นนอร์ธบ่นอย่างงี้ทุกที ไม่เหนื่อยบ้างเหรอ", g3: "พี่พุ่งใต้พูดถูกใจว่ะ เยี่ยม ๆ",
+                g4: "มึงงงงงเนี่ยน่ะเตอร์ แล้วแมวไปไหนอ่ะ", g5: "อยู่กับพี่ฟ้าล่ะมั่งหรือไม่ก็ทำงาน ใครจะว่างเหมือนมึง", g6: "เออ! แม่งบ้าไปแล้ว! ละนี่กูหิวข้าวมากกกก แต่ไม่มีกะจิตกะใจจะแดก เพราะเพิ่งโดนร้านพรีของในทวิตโกงเงินไป! โมโหโว้ยยยย จะวีนนนน!!! 🤬",
+                g7: "เห็นแก่ของถูกแล้วอ่ะดิ มีผัวรวยแต่ขี้งกน่ะมึงน่ะ", g8: "ถือว่าช่วยพี่โจประหยัดไง มึงเนี่ยน่ะ", g9: "พี่โจคงไม่อยากให้นอร์ธประหยัดน่ะเราว่า", g10: "นั่นดิ วัน ๆ นอร์ธเป็นอะไรก็ไม่รู้",
+                g11: "หุบปากแล้วแมว! กูเลยเอาเงินที่เหลือไปทุ่มซื้อหวยละ งวดนี้กูต้องรวย! 🙏✨", g12: "อ้อ ละใครเข้าเซเว่นอย่าลืมเก็บแสตมป์มาให้กูด้วยนะ กูจะเอาไปแลกของ! ห้ามลืมนะเว้ยยยย ขาดอีกนิดเดียว!"
+            },
+            en: {
+                title_4jiw: "4 Chibi 🐣", tuesday: "Tuesday", name_daotok: "Daotok", name_ter: "Ter", name_taifoon: "Tai-foon",
+                g1: "Guyssss, the professor assigned homework like the world is ending tomorrow! I'm so exhausted!", g2: "I see you complaining like this every time, North. Aren't you tired?", g3: "Spot on, Daotok! Great point!",
+                g4: "Shut up Ter! By the way, where is Tai-foon?", g5: "Probably with Fah or working. Who has free time like you?", g6: "Gosh! This is crazy! I'm starving but lost my appetite because a Twitter shop scammed my preorder money! I'm so furious!!! 🤬",
+                g7: "Sucker for cheap stuff! Rich boyfriend but stingy as hell, you!", g8: "I'm just helping P'Joe save money, you dummy!", g9: "Pretty sure P'Joe doesn't want you to cheap out though.", g10: "Yeah, North is being weird all day every day.",
+                g11: "Shut up! I spent all my remaining cash on lottery tickets! I'm winning this round! 🙏✨", g12: "By the way, if anyone goes to 7-Eleven, collect stamps for me! I need them for prizes, don't forget!"
+            },
+            ja: {
+                title_4jiw: "4ちび 🐣", tuesday: "火曜日", name_daotok: "ダオトック", name_ter: "ター", name_taifoon: "タイフーン",
+                g1: "みんなぁぁ、教授が明日世界が終わるみたいに課題出してきた！クタクタだよ！", g2: "ノース、毎回そうやって愚痴ってるの見るけど疲れないの？", g3: "ダオトックさんナイス一言！最高！",
+                g4: "ターうるさい！ところでタイフーンはどこ？", g5: "ファー先輩といるか仕事中でしょ。お前みたいに暇な奴いないよ", g6: "もう最悪！お腹すいたけどXの代行業者にお金詐欺られたから食べる気力もない！マジで怒り爆発！！！ 🤬",
+                g7: "安物に目がくらむからだろ！金持ちの彼氏がいるのにケチなんだから！", g8: "ジョー先輩のために節約してあげてんだよ！", g9: "ジョー先輩はノースに節約してほしいとは思ってないと思うけど…", g10: "それな、ノースって毎日何かしらにキレてるよね",
+                g11: "黙れ！残ったお金全額宝くじに突っ込んだから！今回は絶対当たる！ 🙏✨", g12: "あ、誰かセブン行ったらスタンプ集めてきてね！景品と交換したいから忘れないで！"
+            },
+            ko: {
+                title_4jiw: "4꼬맹이 🐣", tuesday: "화요일", name_daotok: "다오톡", name_ter: "터", name_taifoon: "타이푼",
+                g1: "얘들아아아 교수님이 내일 세상 망할 것처럼 과제를 냈어! 진짜 피곤해 죽겠다!", g2: "노스, 너 매번 그렇게 불평하는 것 같은데 안 피곤해?", g3: "다오톡 형 말 잘했다! 짱짱!",
+                g4: "터 너 조용히 해! 그나저나 타이푼은 어디 갔어?", g5: "파 형이랑 있거나 일하겠지. 너처럼 한가한 사람이 어디 있냐", g6: "아 진짜 짜증 나! 배고파 죽겠는데 트위터 공구 숍에서 사기당해서 밥 먹을 맛도 안 나! 개빡쳐!!! 🤬",
+                g7: "싼 거만 찾더니 꼴좋다! 돈 많은 남친 두고 개구두쇠냐 너!", g8: "조 형 돈 아껴주려고 그런 거잖아 임마!", g9: "조 형은 노스가 돈 아끼길 바라지 않을 것 같은데...", g10: "맞아, 노스는 하루라도 난리 안 치는 날이 없어",
+                g11: "닥쳐! 남은 돈 복권에 다 털어 넣었으니까 이번엔 내가 무조건 대박 난다! 🙏✨", g12: "아 맞다 누구 세븐일레븐 가면 스탬프 챙겨다 줘! 사은품 교환해야 해 잊지 마!"
+            },
+            zh: {
+                title_4jiw: "4小只 🐣", tuesday: "星期二", name_daotok: "ดาวตก", name_ter: "เตอร์", name_taifoon: "ไต้ฝุ่น",
+                g1: "兄弟们，教授留的作业多得像明天世界末日一样！我累瘫了！", g2: "诺斯，我每次都看你这么抱怨，你不累吗？", g3: "ดาวตก 哥说得太对了！赞！",
+                g4: "เตอร์ 你闭嘴！还有 ไต้ฝุ่น 去哪了？", g5: "估计跟 Fah 哥在一起或者在工作吧，谁像你这么闲", g6: "气死我了！我饿得不行，但是刚被推特代购给骗了钱，根本没心情吃饭！暴躁发怒！！！ 🤬",
+                g7: "贪便宜了吧你！明明有有钱的男友却抠得要死！", g8: "我这是在帮 Johan 哥省钱好吗！", g9: "我觉得 Johan 哥应该不希望你这么省吧...", g10: "就是，诺斯整天不知道在折腾啥",
+                g11: "都给爷闭嘴！我把剩下的钱全拿去买彩票了，这期我必中头奖！ 🙏✨", g12: "对了，谁去 7-Eleven 记得帮我攒集章！我要换礼品，千万别忘了！"
+            }
+        };
+
+        function applyLanguage() {
+            const lang = localStorage.getItem('selectedLanguage') || 'th';
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) el.textContent = translations[lang][key];
+            });
+        }
         function updateClock() {
             const now = new Date();
-            document.getElementById('clock-time').textContent = 
-                now.getHours().toString().padStart(2, '0') + ':' + 
-                now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('clock-time').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         }
-        setInterval(updateClock, 1000); updateClock();
+        setInterval(updateClock, 1000); updateClock(); applyLanguage();
     </script>
 </body>
 </html>

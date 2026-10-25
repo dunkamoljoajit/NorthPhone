@@ -7,125 +7,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="responsive.css">
     <style>
-        /* --- Reset & Base Settings --- */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
-            user-select: none; -webkit-user-select: none;
-        }
-        body {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: #0b0b0c;
-        }
-
-        /* --- iPhone Frame --- */
-        .iphone {
-            width: 393px; height: 852px; background-color: #000000;
-            border-radius: 54px; position: relative;
-            border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85);
-            overflow: hidden; display: flex; flex-direction: column;
-        }
-
-        /* --- Status Bar --- */
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 28px 10px; color: white; font-size: 15px;
-            font-weight: 600; z-index: 30; background-color: #111111;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; user-select: none; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0b0b0c; }
+        .iphone { width: 393px; height: 852px; background-color: #000000; border-radius: 54px; position: relative; border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden; display: flex; flex-direction: column; }
+        .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600; z-index: 30; background-color: #111111; }
         .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-
-        /* --- LINE Main Container --- */
-        .line-container {
-            flex: 1; display: flex; flex-direction: column;
-            background-color: #000000; overflow: hidden;
-        }
-
-        /* --- Header --- */
-        .line-header {
-            background-color: #111111; padding: 10px 18px 12px;
-            border-bottom: 0.5px solid #222222;
-        }
-        .header-top {
-            display: flex; justify-content: space-between; align-items: center;
-            color: white; margin-bottom: 12px;
-        }
+        .line-container { flex: 1; display: flex; flex-direction: column; background-color: #000000; overflow: hidden; }
+        .line-header { background-color: #111111; padding: 10px 18px 12px; border-bottom: 0.5px solid #222222; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; color: white; margin-bottom: 12px; }
         .header-top h1 { font-size: 22px; font-weight: 700; margin-left: 8px; }
-        .back-btn { 
-            color: #ffffff; font-size: 20px; cursor: pointer; text-decoration: none; 
-            display: flex; align-items: center;
-        }
+        .back-btn { color: #ffffff; font-size: 20px; cursor: pointer; text-decoration: none; display: flex; align-items: center; }
         .header-icons { display: flex; gap: 18px; font-size: 20px; color: #ffffff; }
-        
-        .search-bar {
-            background: #222222; border-radius: 8px; padding: 8px 12px;
-            display: flex; align-items: center; gap: 8px; color: #8e8e93; font-size: 15px;
-        }
-
-        /* --- Chat List --- */
-        .chat-list {
-            flex: 1; overflow-y: auto; padding-bottom: 20px;
-        }
-        .chat-item {
-            display: flex; align-items: center; padding: 12px 18px;
-            background: #000000; transition: background 0.2s; cursor: pointer;
-        }
+        .search-bar { background: #222222; border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; color: #8e8e93; font-size: 15px; }
+        .chat-list { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+        .chat-item { display: flex; align-items: center; padding: 12px 18px; background: #000000; transition: background 0.2s; cursor: pointer; }
         .chat-item:active { background: #1c1c1e; }
-        
-        .chat-avatar {
-            width: 52px; height: 52px; border-radius: 50%;
-            object-fit: cover; margin-right: 14px; background: #333;
-        }
-        .chat-info {
-            flex: 1; display: flex; flex-direction: column; justify-content: center;
-            border-bottom: 0.5px solid #222222; padding-bottom: 12px; padding-top: 2px;
-            height: 100%;
-        }
-        .chat-name-row {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;
-        }
+        .chat-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; margin-right: 14px; background: #333; }
+        .chat-info { flex: 1; display: flex; flex-direction: column; justify-content: center; border-bottom: 0.5px solid #222222; padding-bottom: 12px; padding-top: 2px; height: 100%; }
+        .chat-name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
         .chat-name { color: #ffffff; font-size: 16px; font-weight: 500; }
         .chat-time { color: #8e8e93; font-size: 12px; }
-        
-        .chat-msg-row {
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .chat-msg {
-            color: #8e8e93; font-size: 14px; white-space: nowrap;
-            overflow: hidden; text-overflow: ellipsis; max-width: 220px;
-        }
-        .unread-badge {
-            background: #06C755; color: white; font-size: 11px; font-weight: bold;
-            height: 20px; min-width: 20px; border-radius: 10px;
-            display: flex; justify-content: center; align-items: center; padding: 0 6px;
-        }
-
-        /* --- Bottom Tab Bar --- */
-        .tab-bar {
-            display: flex; justify-content: space-around; align-items: center;
-            background: #111111; padding: 10px 0 24px; border-top: 0.5px solid #222222;
-        }
-        .tab-item {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: #555555; font-size: 10px; cursor: pointer;
-        }
+        .chat-msg-row { display: flex; justify-content: space-between; align-items: center; }
+        .chat-msg { color: #8e8e93; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+        .unread-badge { background: #06C755; color: white; font-size: 11px; font-weight: bold; height: 20px; min-width: 20px; border-radius: 10px; display: flex; justify-content: center; align-items: center; padding: 0 6px; }
+        .tab-bar { display: flex; justify-content: space-around; align-items: center; background: #111111; padding: 10px 0 24px; border-top: 0.5px solid #222222; }
+        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #555555; font-size: 10px; cursor: pointer; }
         .tab-item.active { color: #ffffff; }
         .tab-item i { font-size: 22px; }
-
-        /* --- Home Indicator --- */
-        .home-indicator {
-            position: absolute; bottom: 8px; left: 50%;
-            transform: translateX(-50%); width: 134px; height: 5px;
-            background-color: white; border-radius: 10px; cursor: pointer; z-index: 60;
-        }
-        a.home-indicator { display: block; text-decoration: none; }
-        
-        /* เอาเส้นใต้ของแชทสุดท้ายออก */
-        .chat-item:last-child .chat-info { border-bottom: none; }
+        .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: white; border-radius: 10px; cursor: pointer; z-index: 60; display: block; }
     </style>
 </head>
 <body>
     <div class="iphone">
-        <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left" id="clock-time">16:42</div>
             <div class="status-right">
@@ -135,15 +48,12 @@
             </div>
         </div>
 
-        <!-- LINE Container -->
         <div class="line-container">
-            
-            <!-- Header -->
             <div class="line-header">
                 <div class="header-top">
                     <div style="display: flex; align-items: center;">
                         <a href="index.html#home" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
-                        <h1>Chats</h1>
+                        <h1 data-key="header_chats">Chats</h1>
                     </div>
                     <div class="header-icons">
                         <i class="fa-solid fa-qrcode"></i>
@@ -153,14 +63,11 @@
                 </div>
                 <div class="search-bar">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <span>Search</span>
+                    <span data-key="search">Search</span>
                 </div>
             </div>
 
-            <!-- Chat List -->
             <div class="chat-list">
-                
-                <!-- Chat: Johan (ลิงก์ไป LineJohan.html) -->
                 <div class="chat-item" onclick="window.location.href='LineJohan.html'">
                     <img src="https://i.pinimg.com/1200x/8d/bb/b8/8dbbb882929048c327e853120a4b5487.jpg" alt="Johan" class="chat-avatar">
                     <div class="chat-info">
@@ -169,84 +76,72 @@
                             <span class="chat-time">14:22</span>
                         </div>
                         <div class="chat-msg-row">
-                            <span class="chat-msg">Sent you a message.</span>
+                            <span class="chat-msg" data-key="msg_johan">Sent you a message.</span>
                             <div class="unread-badge">1</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Chat: ไอ้พี่อาทิตย์ -->
                 <div class="chat-item" onclick="window.location.href='LineArthit.html'">
                     <img src="https://i.pinimg.com/736x/cc/73/5b/cc735b341c9761566845e13502893e7b.jpg" alt="พี่อาทิตย์" class="chat-avatar">
                     <div class="chat-info">
                         <div class="chat-name-row">
-                            <span class="chat-name">ไอ้พี่อาทิตย์</span>
-                            <span class="chat-time">Yesterday</span>
+                            <span class="chat-name" data-key="name_arthit">ไอ้พี่อาทิตย์</span>
+                            <span class="chat-time" data-key="time_yesterday">Yesterday</span>
                         </div>
                         <div class="chat-msg-row">
-                            <span class="chat-msg">ไปทำไรให้พี่โจบล็อกอีกล่ะ</span>
-                            <!-- ไม่มี unread badge -->
+                            <span class="chat-msg" data-key="msg_arthit">ไปทำไรให้พี่โจบล็อกอีกล่ะ</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Chat: 4 จิ๋ว -->
                 <div class="chat-item" onclick="window.location.href='Line4Jiw.html'">
                     <img src="https://i.pinimg.com/1200x/b2/74/4a/b2744a8447eb64d5e04f6c4c4d3aeefc.jpg" alt="4 จิ๋ว" class="chat-avatar">
                     <div class="chat-info">
                         <div class="chat-name-row">
-                            <span class="chat-name">4 จิ๋ว 🐣</span>
-                            <span class="chat-time">Tuesday</span>
+                            <span class="chat-name" data-key="name_4jiw">4 จิ๋ว 🐣</span>
+                            <span class="chat-time" data-key="time_tuesday">Tuesday</span>
                         </div>
                         <div class="chat-msg-row">
-                            <span class="chat-msg"></span>
-                            <!-- ไม่มี unread badge -->
+                            <span class="chat-msg" data-key="msg_4jiw">อ้อ ละใครเข้าเซเว่นอย่าลืมเก็บแสตมป์มาให้กูด้วยนะ</span>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Bottom Tab Bar -->
             <div class="tab-bar">
-                <div class="tab-item">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Home</span>
-                </div>
-                <div class="tab-item active">
-                    <i class="fa-solid fa-comment"></i>
-                    <span>Chats</span>
-                </div>
-                <div class="tab-item">
-                    <i class="fa-brands fa-envira"></i>
-                    <span>VOOM</span>
-                </div>
-                <div class="tab-item">
-                    <i class="fa-solid fa-newspaper"></i>
-                    <span>Today</span>
-                </div>
-                <div class="tab-item">
-                    <i class="fa-solid fa-wallet"></i>
-                    <span>Wallet</span>
-                </div>
+                <div class="tab-item"><i class="fa-solid fa-house"></i><span data-key="tab_home">Home</span></div>
+                <div class="tab-item active"><i class="fa-solid fa-comment"></i><span data-key="tab_chats">Chats</span></div>
+                <div class="tab-item"><i class="fa-brands fa-envira"></i><span>VOOM</span></div>
+                <div class="tab-item"><i class="fa-solid fa-newspaper"></i><span data-key="tab_today">Today</span></div>
+                <div class="tab-item"><i class="fa-solid fa-wallet"></i><span data-key="tab_wallet">Wallet</span></div>
             </div>
-
         </div>
 
-        <!-- Home Bar -->
         <a href="index.html#home" class="home-indicator"></a>
     </div>
 
     <script>
-        // นาฬิกา
+        const translations = {
+            th: { header_chats: "แชท", search: "ค้นหา", msg_johan: "ส่งข้อความถึงคุณ", name_arthit: "ไอ้พี่อาทิตย์", time_yesterday: "เมื่อวาน", msg_arthit: "ไปทำไรให้พี่โจบล็อกอีกล่ะ", name_4jiw: "4 จิ๋ว 🐣", time_tuesday: "วันอังคาร", msg_4jiw: "อ้อ ละใครเข้าเซเว่นอย่าลืมเก็บแสตมป์มาให้กูด้วยนะ", tab_home: "หน้าแรก", tab_chats: "แชท", tab_today: "วันนี้", tab_wallet: "วอลเล็ท" },
+            en: { header_chats: "Chats", search: "Search", msg_johan: "Sent you a message.", name_arthit: "Arthit", time_yesterday: "Yesterday", msg_arthit: "What did you do to make Johan block you again?", name_4jiw: "4 Chibi 🐣", time_tuesday: "Tuesday", msg_4jiw: "By the way, if anyone goes to 7-Eleven, collect stamps for me!", tab_home: "Home", tab_chats: "Chats", tab_today: "Today", tab_wallet: "Wallet" },
+            ja: { header_chats: "トーク", search: "検索", msg_johan: "メッセージを送信しました", name_arthit: "アーティット先輩", time_yesterday: "昨日", msg_arthit: "またジョーにブロックされるような事したのか？", name_4jiw: "4ちび 🐣", time_tuesday: "火曜日", msg_4jiw: "あ、セブン行く人スタンプ集めてきてね！", tab_home: "ホーム", tab_chats: "トーク", tab_today: "TODAY", tab_wallet: "ウォレット" },
+            ko: { header_chats: "대화", search: "검색", msg_johan: "메시지를 보냈습니다.", name_arthit: "อาทิตย์ 형", time_yesterday: "어제", msg_arthit: "조 พี่한테 또 블록당하게 무슨 짓 했냐?", name_4jiw: "4꼬맹이 🐣", time_tuesday: "화요일", msg_4jiw: "아 맞다 세븐일레븐 가는 사람 스탬프 모아줘!", tab_home: "홈", tab_chats: "대화", tab_today: "투데이", tab_wallet: "지갑" },
+            zh: { header_chats: "聊天", search: "搜索", msg_johan: "向您发送了一条消息", name_arthit: "อาทิตย์ 哥", time_yesterday: "昨天", msg_arthit: "你又做了什么惹Johan把你拉黑了？", name_4jiw: "4小只 🐣", time_tuesday: "星期二", msg_4jiw: "对了，谁去7-Eleven记得帮我留印章！", tab_home: "主页", tab_chats: "聊天", tab_today: "今日", tab_wallet: "钱包" }
+        };
+
+        function applyLanguage() {
+            const lang = localStorage.getItem('selectedLanguage') || 'th';
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) el.textContent = translations[lang][key];
+            });
+        }
         function updateClock() {
             const now = new Date();
-            let h = now.getHours().toString().padStart(2, '0');
-            let m = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('clock-time').textContent = `${h}:${m}`;
+            document.getElementById('clock-time').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateClock, 1000); updateClock(); applyLanguage();
     </script>
 </body>
 </html>

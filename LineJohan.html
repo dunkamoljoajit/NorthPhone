@@ -7,94 +7,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="responsive.css">
     <style>
-        /* --- Reset & Basic Settings --- */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-            user-select: none; -webkit-user-select: none;
-        }
-        body {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: #0b0b0c;
-        }
-
-        /* --- iPhone Frame --- */
-        .iphone {
-            width: 393px; height: 852px; background-color: #111111;
-            border-radius: 54px; position: relative;
-            border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85);
-            overflow: hidden; display: flex; flex-direction: column;
-        }
-
-        /* --- Status Bar --- */
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 28px 10px; color: white; font-size: 15px;
-            font-weight: 600; z-index: 10; background-color: #1c1c1e;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; user-select: none; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0b0b0c; }
+        .iphone { width: 393px; height: 852px; background-color: #111111; border-radius: 54px; position: relative; border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden; display: flex; flex-direction: column; }
+        .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600; z-index: 10; background-color: #1c1c1e; }
         .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-
-        /* --- Header (Top Navigation) --- */
-        .header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 20px; background-color: #1c1c1e; color: white;
-            border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
-        }
-        .back-btn {
-            font-size: 22px; color: white; text-decoration: none; cursor: pointer;
-            display: flex; align-items: center; width: 60px;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background-color: #1c1c1e; color: white; border-bottom: 0.5px solid rgba(255, 255, 255, 0.05); }
+        .back-btn { font-size: 22px; color: white; text-decoration: none; cursor: pointer; display: flex; align-items: center; width: 60px; }
         .header-title { font-size: 17px; font-weight: 600; text-align: center; flex: 1; }
         .header-icons { display: flex; gap: 18px; width: 60px; justify-content: flex-end; }
         .header-icons i { font-size: 18px; }
-
-        /* --- Chat Area --- */
-        .chat-container {
-            flex: 1; background-color: #0a0f14; /* สีพื้นหลังแชทโทนเข้ม */
-            padding: 20px 16px; display: flex; flex-direction: column; gap: 12px;
-            overflow-y: auto;
-        }
+        .chat-container { flex: 1; background-color: #0a0f14; padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
         .message { display: flex; flex-direction: column; max-width: 75%; }
         .message.received { align-self: flex-start; }
         .message.sent { align-self: flex-end; }
-        
-        .bubble {
-            padding: 10px 14px; border-radius: 18px; font-size: 15px;
-            line-height: 1.4; word-wrap: break-word;
-        }
+        .bubble { padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
         .received .bubble { background-color: #2c2c2e; color: white; border-top-left-radius: 4px; }
         .sent .bubble { background-color: #06c755; color: #111; font-weight: 500; border-top-right-radius: 4px; }
-        
         .time { font-size: 11px; color: rgba(255, 255, 255, 0.4); margin-top: 4px; }
         .received .time { align-self: flex-start; margin-left: 4px; }
         .sent .time { align-self: flex-end; margin-right: 4px; }
-
-        /* --- Input Area (Bottom) --- */
-        .input-area {
-            display: flex; align-items: center; padding: 12px 16px 36px;
-            background-color: #1c1c1e; gap: 14px;
-            border-top: 0.5px solid rgba(255, 255, 255, 0.05);
-        }
+        .input-area { display: flex; align-items: center; padding: 12px 16px 36px; background-color: #1c1c1e; gap: 14px; border-top: 0.5px solid rgba(255, 255, 255, 0.05); }
         .input-area i { font-size: 22px; color: rgba(255, 255, 255, 0.5); cursor: pointer; }
-        .input-box {
-            flex: 1; background-color: #2c2c2e; border-radius: 20px;
-            padding: 8px 16px; color: white; font-size: 15px;
-            border: none; outline: none;
-        }
-        .input-box::placeholder { color: rgba(255, 255, 255, 0.4); }
-
-        /* --- Home Indicator --- */
-        .home-indicator {
-            position: absolute; bottom: 8px; left: 50%;
-            transform: translateX(-50%); width: 134px; height: 5px;
-            background-color: white; border-radius: 10px; cursor: pointer;
-        }
-        a.home-indicator { display: block; text-decoration: none; }
+        .input-box { flex: 1; background-color: #2c2c2e; border-radius: 20px; padding: 8px 16px; color: white; font-size: 15px; border: none; outline: none; }
+        .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: white; border-radius: 10px; cursor: pointer; display: block; }
     </style>
 </head>
 <body>
     <div class="iphone">
-        <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left">16:15</div>
             <div class="status-right">
@@ -104,80 +44,73 @@
             </div>
         </div>
         
-        <!-- Header -->
         <div class="header">
             <a href="Line.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
             <div class="header-title">Johan</div>
-            <div class="header-icons">
-                <i class="fa-solid fa-phone"></i>
-                <i class="fa-solid fa-bars"></i>
-            </div>
+            <div class="header-icons"><i class="fa-solid fa-phone"></i><i class="fa-solid fa-bars"></i></div>
         </div>
         
-        <!-- Chat Area -->
         <div class="chat-container">
-            <div class="message received">
-                <div class="bubble">Morning ครับนอร์ธ</div>
-                <div class="time">8:00</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">Morning ครับพี่โจ</div>
-                <div class="time">8.02</div>
-            </div>
-            <div class="message received">
-                <div class="bubble">พี่กินข้าวเช้าเรียบร้อยแล้วน่ะ</div>
-                <div class="time">8.03</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">เก่งมากครับพี่โจ</div>
-                <div class="time">8.04</div>
-            </div>
-            <div class="message received">
-                <div class="bubble">แล้วมีรางวัลจะให้พี่ไหม</div>
-                <div class="time">8.05</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">พี่โจอ่า รางวัลอะไรนอร์ธไม่รู้ด้วยน่ะ</div>
-                <div class="time">8.06</div>
-            </div>
-            <div class="message received">
-                <div class="bubble">ไม่มีรางวัลให้พี่เหรอครับ</div>
-                <div class="time">8.05</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">ก็ได้ ๆ ให้รางวัลเปนจุ้บเป้ดโง่ทีนึง</div>
-                <div class="time">8.06</div>
-            </div>
-            <div class="message received">
-                <div class="bubble">เล่นงี้เลย พอพี่ไม่ได้อยู่ใกล้ ๆ</div>
-                <div class="time">8.07</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">อย่ามาใส่ร้ายนอร์ธนะครับ กินข้าวแล้วก็ทำงานเลย</div>
-                <div class="time">8.08</div>
-            </div>
-            <div class="message sent">
-                <div class="bubble">นอร์ธไม่กวนแล้ว</div>
-                <div class="time">8.08</div>
-            </div>
-            <!-- แก้ไขคลาสของข้อความนี้ให้ถูกต้อง (เป็นของพี่โจ/ผู้รับ) -->
-            <div class="message received">
-                <div class="bubble">ก็ได้ เดี๋ยวตอนเที่ยงพีทักมาอีกน่ะ</div>
-                <div class="time">8.08</div>
-            </div>
+            <div class="message received"><div class="bubble" data-key="j1">Morning ครับนอร์ธ</div><div class="time">8:00</div></div>
+            <div class="message sent"><div class="bubble" data-key="j2">Morning ครับพี่โจ</div><div class="time">8:02</div></div>
+            <div class="message received"><div class="bubble" data-key="j3">พี่กินข้าวเช้าเรียบร้อยแล้วน่ะ</div><div class="time">8:03</div></div>
+            <div class="message sent"><div class="bubble" data-key="j4">เก่งมากครับพี่โจ</div><div class="time">8:04</div></div>
+            <div class="message received"><div class="bubble" data-key="j5">แล้วมีรางวัลจะให้พี่ไหม</div><div class="time">8:05</div></div>
+            <div class="message sent"><div class="bubble" data-key="j6">พี่โจอ่า รางวัลอะไรนอร์ธไม่รู้ด้วยน่ะ</div><div class="time">8:06</div></div>
+            <div class="message received"><div class="bubble" data-key="j7">ไม่มีรางวัลให้พี่เหรอครับ</div><div class="time">8:06</div></div>
+            <div class="message sent"><div class="bubble" data-key="j8">ก็ได้ ๆ ให้รางวัลเป็นจุ๊บเป็ดโง่ทีนึง</div><div class="time">8:07</div></div>
+            <div class="message received"><div class="bubble" data-key="j9">เล่นงี้เลย พอพี่ไม่ได้อยู่ใกล้ ๆ</div><div class="time">8:07</div></div>
+            <div class="message sent"><div class="bubble" data-key="j10">อย่ามาใส่ร้ายนอร์ธนะครับ กินข้าวแล้วก็ทำงานเลย</div><div class="time">8:08</div></div>
+            <div class="message sent"><div class="bubble" data-key="j11">นอร์ธไม่กวนแล้ว</div><div class="time">8:08</div></div>
+            <div class="message received"><div class="bubble" data-key="j12">ก็ได้ เดี๋ยวตอนเที่ยงพี่ทักมาอีกน่ะ</div><div class="time">8:08</div></div>
         </div>
         
-        <!-- Input Area -->
         <div class="input-area">
-            <i class="fa-solid fa-plus"></i>
-            <i class="fa-solid fa-camera"></i>
-            <i class="fa-regular fa-image"></i>
+            <i class="fa-solid fa-plus"></i><i class="fa-solid fa-camera"></i><i class="fa-regular fa-image"></i>
             <input type="text" class="input-box" placeholder="Aa">
             <i class="fa-solid fa-microphone"></i>
         </div>
         
-        <!-- เปลี่ยนลิงก์ตรง Home Indicator ด้านล่างด้วย -->
         <a href="index.html#home" class="home-indicator"></a>
     </div>
+
+    <script>
+        const translations = {
+            th: {
+                j1: "Morning ครับนอร์ธ", j2: "Morning ครับพี่โจ", j3: "พี่กินข้าวเช้าเรียบร้อยแล้วน่ะ", j4: "เก่งมากครับพี่โจ",
+                j5: "แล้วมีรางวัลจะให้พี่ไหม", j6: "พี่โจอ่า รางวัลอะไรนอร์ธไม่รู้ด้วยน่ะ", j7: "ไม่มีรางวัลให้พี่เหรอครับ", j8: "ก็ได้ ๆ ให้รางวัลเป็นจุ๊บเป็ดโง่ทีนึง",
+                j9: "เล่นงี้เลย พอพี่ไม่ได้อยู่ใกล้ ๆ", j10: "อย่ามาใส่ร้ายนอร์ธนะครับ กินข้าวแล้วก็ทำงานเลย", j11: "นอร์ธไม่กวนแล้ว", j12: "ก็ได้ เดี๋ยวตอนเที่ยงพี่ทักมาอีกนะ"
+            },
+            en: {
+                j1: "Morning North", j2: "Morning P'Joe", j3: "I've had my breakfast already.", j4: "Good boy P'Joe!",
+                j5: "So do I get a reward?", j6: "P'Joe... I don't know anything about a reward!", j7: "No reward for me?", j8: "Fine fine, I'll give you a kiss on your duck plushie once.",
+                j9: "Teasing me like this when I'm not around, huh?", j10: "Don't frame me! Go back to work after eating.", j11: "I won't bother you now.", j12: "Alright, I'll text you again at noon."
+            },
+            ja: {
+                j1: "ノース、おはよう", j2: "ジョー先輩、おはようございます", j3: "朝ごはんちゃんと食べたよ", j4: "えらいですね、ジョー先輩",
+                j5: "ご褒美はくれないの？", j6: "ジョー先輩ったら…ご褒美なんて知りませんよ！", j7: "僕へのご褒美はないの？", j8: "はいはい、アヒルのぬいぐるみにチューしてあげます",
+                j9: "近くにいないからって調子いいな", j10: "濡れ衣着せないでください！ご飯食べたら仕事してくださいね", j11: "もう邪魔しませんから", j12: "わかった、お昼にまた連絡するね"
+            },
+            ko: {
+                j1: "노스, 좋은 아침", j2: "조 형, 좋은 아침이에요", j3: "아침 밥 잘 챙겨 먹었어", j4: "잘했어요 조 형",
+                j5: "그럼 나 상은 안 줘?", j6: "조 형도 참... 무슨 상을 말하는지 몰라요!", j7: "나한테 줄 상 없어?", j8: "알았어요 알았어, 오리 인형에 키스 한 번 해줄게요",
+                j9: "옆에 없다고 놀리는 거 봐라", j10: "모함하지 마세요! 밥 먹었으면 가서 일하세요", j11: "이제 방해 안 할게요", j12: "알았어, 점심때 또 톡할게"
+            },
+            zh: {
+                j1: "诺斯，早安", j2: "Johan哥，早安", j3: "我已经吃过早餐了", j4: "真棒，Johan哥",
+                j5: "那有给我的奖励吗？", j6: "Johan哥…我可不知道什么奖励！", j7: "真的没有奖励给我吗？", j8: "好啦好啦，奖励亲笨小鸭一下",
+                j9: "我不在你身边你就调皮是吧", j10: "不要陷害我！吃完饭快去工作", j11: "我不打扰你了", j12: "好吧，中午我再联系你"
+            }
+        };
+
+        function applyLanguage() {
+            const lang = localStorage.getItem('selectedLanguage') || 'th';
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) el.textContent = translations[lang][key];
+            });
+        }
+        applyLanguage();
+    </script>
 </body>
 </html>

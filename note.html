@@ -7,140 +7,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="responsive.css">
     <style>
-        /* --- Reset & Base Settings --- */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif;
-            user-select: none; -webkit-user-select: none;
-        }
-        body {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: #0b0b0c;
-        }
-
-        /* --- iPhone Frame --- */
-        .iphone {
-            width: 393px; height: 852px; background-color: #000000;
-            border-radius: 54px; position: relative;
-            border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85);
-            overflow: hidden; display: flex; flex-direction: column;
-        }
-
-        /* --- Status Bar --- */
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 28px 10px; color: white; font-size: 15px;
-            font-weight: 600; z-index: 10; background-color: #000000;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; user-select: none; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0b0b0c; }
+        .iphone { width: 393px; height: 852px; background-color: #000000; border-radius: 54px; position: relative; border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden; display: flex; flex-direction: column; }
+        .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600; z-index: 10; background-color: #000000; }
         .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-
-        /* --- Notes View --- */
-        .notes-container {
-            flex: 1; display: flex; flex-direction: column;
-            position: relative; overflow: hidden; background-color: #000000;
-        }
-
-        .notes-page {
-            display: none; flex-direction: column; width: 100%; height: 100%;
-            padding: 8px 18px 24px; box-sizing: border-box;
-        }
+        .notes-container { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; background-color: #000000; }
+        .notes-page { display: none; flex-direction: column; width: 100%; height: 100%; padding: 8px 18px 24px; box-sizing: border-box; }
         .notes-page.active { display: flex; }
-
-        /* --- Header & Navigation --- */
-        .notes-header {
-            display: flex; justify-content: space-between; align-items: center;
-            height: 44px; color: #e5b800; font-size: 17px;
-        }
-        .notes-back {
-            cursor: pointer; display: flex; align-items: center; gap: 6px;
-            font-weight: 400; color: #e5b800; text-decoration: none;
-        }
-        .notes-title {
-            font-size: 32px; font-weight: 700; margin: 8px 0 16px; color: #ffffff;
-        }
-
-        /* --- Notes List --- */
-        .notes-list {
-            flex: 1; background: #1c1c1e; border-radius: 12px;
-            overflow-y: auto; margin-bottom: 8px;
-        }
-        .note-card {
-            padding: 14px 16px; border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer; transition: background 0.2s;
-        }
+        .notes-header { display: flex; justify-content: space-between; align-items: center; height: 44px; color: #e5b800; font-size: 17px; }
+        .notes-back { cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 400; color: #e5b800; text-decoration: none; }
+        .notes-title { font-size: 32px; font-weight: 700; margin: 8px 0 16px; color: #ffffff; }
+        .notes-list { flex: 1; background: #1c1c1e; border-radius: 12px; overflow-y: auto; margin-bottom: 8px; }
+        .note-card { padding: 14px 16px; border-bottom: 0.5px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: background 0.2s; }
         .note-card:active { background: rgba(255, 255, 255, 0.05); }
         .note-card:last-child { border-bottom: none; }
-        .note-card-title {
-            font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #ffffff;
-        }
-        .note-card-sub {
-            font-size: 14px; color: #8e8e93; display: flex; gap: 8px;
-        }
+        .note-card-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #ffffff; }
+        .note-card-sub { font-size: 14px; color: #8e8e93; display: flex; gap: 8px; }
         .note-date { color: #8e8e93; flex-shrink: 0; }
-        .note-preview {
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #8e8e93;
-        }
-
-        /* --- Footer --- */
-        .notes-footer {
-            height: 40px; display: flex; justify-content: center;
-            align-items: center; border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-            color: #8e8e93; font-size: 12px; padding-bottom: 8px;
-        }
-
-        /* --- Note Detail View (Read Only) --- */
+        .note-preview { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #8e8e93; }
+        .notes-footer { height: 40px; display: flex; justify-content: center; align-items: center; border-top: 0.5px solid rgba(255, 255, 255, 0.1); color: #8e8e93; font-size: 12px; padding-bottom: 8px; }
         .note-edit-date { font-size: 12px; color: #8e8e93; text-align: center; display: block; margin: 4px 0 16px; }
-        .note-detail-title {
-            color: #ffffff; font-size: 24px; font-weight: 700; margin-bottom: 12px;
-        }
-        .note-detail-body {
-            flex: 1; color: #e5e5ea; font-size: 16px; line-height: 1.6;
-            white-space: pre-wrap; overflow-y: auto;
-        }
-
-        /* --- Home Indicator --- */
-        .home-indicator {
-            position: absolute; bottom: 8px; left: 50%;
-            transform: translateX(-50%); width: 134px; height: 5px;
-            background-color: white; border-radius: 10px; cursor: pointer; z-index: 20;
-        }
-        a.home-indicator { display: block; text-decoration: none; }
+        .note-detail-title { color: #ffffff; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+        .note-detail-body { flex: 1; color: #e5e5ea; font-size: 16px; line-height: 1.6; white-space: pre-wrap; overflow-y: auto; }
+        .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: white; border-radius: 10px; cursor: pointer; z-index: 20; display: block; }
     </style>
 </head>
 <body>
     <div class="iphone">
-        <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left" id="clock-time">16:42</div>
-            <div class="status-right">
-                <i class="fa-solid fa-signal"></i>
-                <i class="fa-solid fa-wifi"></i>
-                <i class="fa-solid fa-battery-full"></i>
-            </div>
+            <div class="status-right"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div>
         </div>
 
-        <!-- Notes Area -->
         <div class="notes-container">
-            <!-- Page 1: รายชื่อโน้ต -->
             <div id="notes-list-page" class="notes-page active">
                 <div class="notes-header">
-                    <a href="index.html#home" class="notes-back"><i class="fa-solid fa-chevron-left"></i> Home</a>
+                    <a href="index.html#home" class="notes-back"><i class="fa-solid fa-chevron-left"></i> <span data-key="nav_home">Home</span></a>
                 </div>
-                <h1 class="notes-title">Notes</h1>
-                
-                <div class="notes-list" id="notes-list-container">
-                    <!-- รายการโน้ตจะแสดงตรงนี้ -->
-                </div>
-
-                <div class="notes-footer">
-                    <span id="notes-count-text">0 Notes</span>
-                </div>
+                <h1 class="notes-title" data-key="title_notes">Notes</h1>
+                <div class="notes-list" id="notes-list-container"></div>
+                <div class="notes-footer"><span id="notes-count-text">0 Notes</span></div>
             </div>
 
-            <!-- Page 2: หน้าแสดงรายละเอียดโน้ต (อ่านอย่างเดียว) -->
             <div id="note-detail-page" class="notes-page">
                 <div class="notes-header">
-                    <span class="notes-back" id="back-to-list-btn"><i class="fa-solid fa-chevron-left"></i> Notes</span>
+                    <span class="notes-back" id="back-to-list-btn"><i class="fa-solid fa-chevron-left"></i> <span data-key="title_notes">Notes</span></span>
                 </div>
                 <span class="note-edit-date" id="detail-date"></span>
                 <h2 class="note-detail-title" id="detail-title"></h2>
@@ -148,90 +60,93 @@
             </div>
         </div>
 
-        <!-- Home Bar -->
         <a href="index.html#home" class="home-indicator"></a>
     </div>
 
     <script>
-        // รายการโน้ตสำหรับกดอ่าน
-        const notesData = [
-            {
-                id: 1,
-                title: "แพลนไปเที่ยวกับพี่โจ",
-                body: "- ทริปเที่ยวทะเลช่วงวันหยุดยาว 🌊\n- พกกล้องไปด้วย (พี่โจสัญญาว่าจะถ่ายรูปสวยๆ ให้)\n- แวะคาเฟ่ร้านโปรดกินเค้กกาแฟ\n- ห้ามลืม: เคลียร์งานให้เสร็จก่อนเดินทาง!",
-                date: "October 25, 2026"
-            },
-            {
-                id: 2,
-                title: "แพลนซื้อของเข้าห้อง",
-                body: "1. น้ำดื่ม 2 แพ็ค\n2. นมสด + ซีเรียล\n3. ขนมปัง + เนย\n4. ขนมกินเล่นของโนอาห์และไนล่า\n5. วัตถุดิบทำสุกี้กินตอนเย็น 🍲\n6. ทิชชู่เปียก",
-                date: "Yesterday"
-            },
-            {
-                id: 3,
-                title: "แพลนเที่ยวกับ 4 จิ๋ว โดยไม่มี 4",
-                body: "- นัดเจอร้านชาบูหน้ามหาลัย 5 โมงเย็น 🥢\n- นัดวันทริปกาญจนบุรีเดือนหน้า\n- ถ่ายรูปอัปไอจีกลุ่ม\n- **ใครมาสายปรับนาทีละ 10 บาท!**",
-                date: "October 20, 2026"
-            }
-        ];
+        const localizedNotes = {
+            th: [
+                { id: 1, title: "แพลนไปเที่ยวกับพี่โจ", body: "- ทริปเที่ยวทะเลช่วงวันหยุดยาว 🌊\n- พกกล้องไปด้วย (พี่โจสัญญาว่าจะถ่ายรูปสวยๆ ให้)\n- แวะคาเฟ่ร้านโปรดกินเค้กกาแฟ\n- ห้ามลืม: เคลียร์งานให้เสร็จก่อนเดินทาง!", date: "25 ตุลาคม 2026" },
+                { id: 2, title: "แพลนซื้อของเข้าห้อง", body: "1. น้ำดื่ม 2 แพ็ค\n2. นมสด + ซีเรียล\n3. ขนมปัง + เนย\n4. ขนมกินเล่นของโนอาห์และไนล่า\n5. วัตถุดิบทำสุกี้กินตอนเย็น 🍲\n6. ทิชชู่เปียก", date: "เมื่อวาน" },
+                { id: 3, title: "แพลนเที่ยวกับ 4 จิ๋ว โดยไม่มี 4", body: "- นัดเจอร้านชาบูหน้ามหาลัย 5 โมงเย็น 🥢\n- นัดวันทริปกาญจนบุรีเดือนหน้า\n- ถ่ายรูปอัปไอจีกลุ่ม\n- **ใครมาสายปรับนาทีละ 10 บาท!**", date: "20 ตุลาคม 2026" }
+            ],
+            en: [
+                { id: 1, title: "Trip Plan with P'Joe", body: "- Long weekend beach trip 🌊\n- Bring camera (P'Joe promised to take pretty photos)\n- Stop by favorite cafe for coffee & cake\n- DON'T FORGET: Finish work before leaving!", date: "October 25, 2026" },
+                { id: 2, title: "Grocery Shopping List", body: "1. Drinking water (2 packs)\n2. Fresh milk + cereal\n3. Bread + butter\n4. Snacks for Noah & Nyla\n5. Suki ingredients for dinner 🍲\n6. Wet wipes", date: "Yesterday" },
+                { id: 3, title: "Trip with 4 Chibi (minus 4)", body: "- Meet at Shabu restaurant in front of uni at 5 PM 🥢\n- Schedule Kanchanaburi trip next month\n- Take group photos for IG\n- **Late fine: 10 THB per minute!**", date: "October 20, 2026" }
+            ],
+            ja: [
+                { id: 1, title: "ジョー先輩との旅行計画", body: "- 連休の海旅行 🌊\n- カメラ持参（ジョー先輩が映える写真撮ってくれる約束）\n- お気に入りカフェでケーキセット\n- 忘れないこと：出発前に課題終わらせる！", date: "2026年10月25日" },
+                { id: 2, title: "部屋の買い物リスト", body: "1. 水 2パック\n2. 牛乳＋シリアル\n3. 食パン＋バター\n4. ノアとナイラのおやつ\n5. 夜のタイ風すき焼きの材料 🍲\n6. ウェットティッシュ", date: "昨日" },
+                { id: 3, title: "4ちび旅行計画（4なし）", body: "- 17時に大学前のしゃぶしゃぶ屋集合 🥢\n- 来月のカンチャナブリー旅行の日程決定\n- インスタ用グループ写真撮影\n- **遅刻は1分につき10バーツの罰金！**", date: "2026年10月20日" }
+            ],
+            ko: [
+                { id: 1, title: "조 형이랑 여행 계획", body: "- 연휴 바다 여행 🌊\n- 카메라 챙기기 (조 형이 예쁜 사진 찍어주기로 약속함)\n- 단골 카페 들러서 케이크 먹기\n- 절대 잊지 말 것: 출발 전에 과제 끝내기!", date: "2026년 10월 25일" },
+                { id: 2, title: "자취방 장보기 목록", body: "1. 생수 2팩\n2. 우유 + 시리얼\n3. 식빵 + 버터\n4. 노아 & 나일라 간식\n5. 저녁 스키야키 재료 🍲\n6. 물티슈", date: "어제" },
+                { id: 3, title: "4꼬맹이들과 여행 계획", body: "- 오후 5시 학교 앞 샤브샤브집 집합 🥢\n- 다음 달 깐차나부리 여행 날짜 잡기\n- 단체 사진 찍어서 인스타 올리기\n- **지각비 1분당 10바트!**", date: "2026년 10월 20일" }
+            ],
+            zh: [
+                { id: 1, title: "与 Johan 哥的旅行计划", body: "- 长周末海边之旅 🌊\n- 带上相机（Johan哥答应帮我拍好看的照片）\n- 顺路去最喜欢的咖啡馆吃蛋糕\n- 切记：出发前一定要把工作/作业搞定！", date: "2026年10月25日" },
+                { id: 2, title: "房间采购清单", body: "1. 饮用水 2包\n2. 鲜奶 + 麦片\n3. 面包 + 黄油\n4. Noah 和 Nyla 的零食\n5. 晚餐打边炉/泰式火锅食材 🍲\n6. 湿纸巾", date: "昨天" },
+                { id: 3, title: "4小只出游计划（没有4）", body: "- 下午5点大学门口火锅店集合 🥢\n- 定下个月北碧府旅行的日期\n- 拍合照发 IG\n- **迟到罚款：每分钟 10 泰铢！**", date: "2026年10月20日" }
+            ]
+        };
 
-        // นาฬิกา
-        function updateClock() {
-            const now = new Date();
-            let h = now.getHours().toString().padStart(2, '0');
-            let m = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('clock-time').textContent = `${h}:${m}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        const uiTrans = {
+            th: { nav_home: "หน้าแรก", title_notes: "โน้ต" },
+            en: { nav_home: "Home", title_notes: "Notes" },
+            ja: { nav_home: "ホーム", title_notes: "メモ" },
+            ko: { nav_home: "홈", title_notes: "메모" },
+            zh: { nav_home: "主页", title_notes: "备忘录" }
+        };
 
-        // แสดงรายการโน้ต
+        let currentNotes = [];
+
         function renderNotesList() {
+            const lang = localStorage.getItem('selectedLanguage') || 'th';
+            currentNotes = localizedNotes[lang] || localizedNotes['th'];
+
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (uiTrans[lang] && uiTrans[lang][key]) el.textContent = uiTrans[lang][key];
+            });
+
             const container = document.getElementById('notes-list-container');
             const countText = document.getElementById('notes-count-text');
             if (!container) return;
 
             container.innerHTML = '';
-            notesData.forEach(note => {
+            currentNotes.forEach(note => {
                 const card = document.createElement('div');
                 card.className = 'note-card';
                 card.onclick = () => openNoteDetail(note.id);
-                card.innerHTML = `
-                    <div class="note-card-title">${note.title}</div>
-                    <div class="note-card-sub">
-                        <span class="note-date">${note.date}</span>
-                        <span class="note-preview">${note.body}</span>
-                    </div>
-                `;
+                card.innerHTML = `<div class="note-card-title">${note.title}</div><div class="note-card-sub"><span class="note-date">${note.date}</span><span class="note-preview">${note.body}</span></div>`;
                 container.appendChild(card);
             });
 
-            if (countText) {
-                countText.textContent = `${notesData.length} ${notesData.length === 1 ? 'Note' : 'Notes'}`;
-            }
+            if (countText) countText.textContent = `${currentNotes.length} Notes`;
         }
 
-        // เปิดอ่านรายละเอียดโน้ต
         function openNoteDetail(id) {
-            const note = notesData.find(n => n.id === id);
+            const note = currentNotes.find(n => n.id === id);
             if (!note) return;
-
             document.getElementById('detail-date').textContent = note.date;
             document.getElementById('detail-title').textContent = note.title;
             document.getElementById('detail-body').textContent = note.body;
-
             document.getElementById('notes-list-page').classList.remove('active');
             document.getElementById('note-detail-page').classList.add('active');
         }
 
-        // กดกลับไปหน้ารายการโน้ต
         document.getElementById('back-to-list-btn')?.addEventListener('click', () => {
             document.getElementById('note-detail-page').classList.remove('active');
             document.getElementById('notes-list-page').classList.add('active');
         });
 
-        // โหลดข้อมูลครั้งแรก
-        renderNotesList();
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock-time').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000); updateClock(); renderNotesList();
     </script>
 </body>
 </html>

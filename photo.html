@@ -7,584 +7,186 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="responsive.css">
     <style>
-        /* --- Reset & Base Settings --- */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif;
-            user-select: none; -webkit-user-select: none;
-        }
-        body {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: #0b0b0c;
-        }
-
-        /* --- iPhone Frame --- */
-        .iphone {
-            width: 393px; height: 852px; background-color: #000000;
-            border-radius: 54px; position: relative;
-            border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85);
-            overflow: hidden; display: flex; flex-direction: column;
-        }
-
-        /* --- Status Bar --- */
-        .status-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 28px 10px; color: white; font-size: 15px;
-            font-weight: 600; z-index: 30; background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; user-select: none; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #0b0b0c; }
+        .iphone { width: 393px; height: 852px; background-color: #000000; border-radius: 54px; position: relative; border: 4px solid #2d2d30; box-shadow: 0 25px 65px rgba(0, 0, 0, 0.85); overflow: hidden; display: flex; flex-direction: column; }
+        .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px 10px; color: white; font-size: 15px; font-weight: 600; z-index: 30; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); }
         .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-
-        /* --- Photos Main Container --- */
-        .photos-container {
-            flex: 1; display: flex; flex-direction: column;
-            position: relative; overflow: hidden; background-color: #000000;
-        }
-
-        .photos-page {
-            display: none; flex-direction: column; width: 100%; height: 100%;
-            overflow-y: auto; padding-bottom: 20px;
-        }
+        .photos-container { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; background-color: #000000; }
+        .photos-page { display: none; flex-direction: column; width: 100%; height: 100%; overflow-y: auto; padding-bottom: 20px; }
         .photos-page.active { display: flex; }
-
-        /* --- Page Header --- */
-        .gallery-header {
-            padding: 12px 18px 8px; display: flex; justify-content: space-between;
-            align-items: center; color: white;
-        }
+        .gallery-header { padding: 12px 18px 8px; display: flex; justify-content: space-between; align-items: center; color: white; }
         .gallery-title { font-size: 28px; font-weight: 700; }
         .gallery-header-icons { display: flex; gap: 16px; font-size: 18px; color: #0a84ff; }
-
-        /* --- Albums Grid (Page 1) --- */
-        .albums-section-title {
-            color: #8e8e93; font-size: 13px; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 0.5px; padding: 12px 18px 8px;
-        }
-        .albums-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
-            padding: 0 18px 24px;
-        }
-        .album-card {
-            display: flex; flex-direction: column; cursor: pointer;
-        }
-        .album-cover {
-            width: 100%; aspect-ratio: 1 / 1; border-radius: 12px;
-            overflow: hidden; background-color: #1c1c1e; position: relative;
-            margin-bottom: 6px; border: 0.5px solid rgba(255, 255, 255, 0.1);
-        }
-        .album-cover img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.2s ease;
-        }
+        .albums-section-title { color: #8e8e93; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 12px 18px 8px; }
+        .albums-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 0 18px 24px; }
+        .album-card { display: flex; flex-direction: column; cursor: pointer; }
+        .album-cover { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; background-color: #1c1c1e; position: relative; margin-bottom: 6px; border: 0.5px solid rgba(255, 255, 255, 0.1); }
+        .album-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s ease; }
         .album-card:active .album-cover img { transform: scale(0.96); }
-        .album-name {
-            color: #ffffff; font-size: 15px; font-weight: 600;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
+        .album-name { color: #ffffff; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .album-count { color: #8e8e93; font-size: 13px; margin-top: 2px; }
-
-        /* --- Album Detail View (Page 2) --- */
-        .album-nav-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 18px; color: white; border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
-        }
-        .album-back-btn {
-            color: #0a84ff; font-size: 17px; cursor: pointer;
-            display: flex; align-items: center; gap: 6px; text-decoration: none;
-        }
+        .album-nav-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; color: white; border-bottom: 0.5px solid rgba(255, 255, 255, 0.1); }
+        .album-back-btn { color: #0a84ff; font-size: 17px; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none; }
         .album-nav-title { font-size: 17px; font-weight: 600; color: white; }
-
-        .photo-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-            padding: 2px 0;
-        }
-        .photo-grid-item {
-            aspect-ratio: 1 / 1; overflow: hidden; background: #1c1c1e;
-            cursor: pointer; position: relative;
-        }
-        .photo-grid-item img {
-            width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;
-        }
-        .photo-grid-item:active img { transform: scale(0.96); }
-
-        /* --- Fullscreen Photo Viewer Modal --- */
-        .photo-viewer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000000; z-index: 40; display: none;
-            flex-direction: column; justify-content: space-between;
-        }
+        .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px 0; }
+        .photo-grid-item { aspect-ratio: 1 / 1; overflow: hidden; background: #1c1c1e; cursor: pointer; position: relative; }
+        .photo-grid-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s; }
+        .photo-viewer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; z-index: 40; display: none; flex-direction: column; justify-content: space-between; }
         .photo-viewer.active { display: flex; }
-
-        .viewer-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 18px; color: white; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px); z-index: 50;
-        }
-        .viewer-back {
-            color: #0a84ff; font-size: 17px; cursor: pointer;
-            display: flex; align-items: center; gap: 6px;
-        }
+        .viewer-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; color: white; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 50; }
+        .viewer-back { color: #0a84ff; font-size: 17px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .viewer-date-info { text-align: center; }
         .viewer-date { font-size: 14px; font-weight: 600; color: white; }
         .viewer-time { font-size: 11px; color: #8e8e93; }
-
-        .viewer-body {
-            flex: 1; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; padding: 10px 0; position: relative; touch-action: pan-y;
-        }
-        .viewer-body img { 
-            max-width: 100%; max-height: 100%; object-fit: contain;
-            transition: opacity 0.15s ease;
-        }
-
-        /* Nav Buttons for Viewer (เพิ่มใหม่) */
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            font-size: 18px; color: rgba(255, 255, 255, 0.8);
-            background: rgba(40, 40, 40, 0.5); width: 36px; height: 36px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; z-index: 55; backdrop-filter: blur(4px);
-            transition: opacity 0.2s, background 0.2s;
-        }
-        .nav-btn:hover { color: #ffffff; background: rgba(0, 0, 0, 0.8); }
-        .nav-btn.prev-btn { left: 12px; }
-        .nav-btn.next-btn { right: 12px; }
-        .nav-btn.disabled { opacity: 0; pointer-events: none; }
-
-        .viewer-toolbar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 28px 36px; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px); color: #0a84ff; font-size: 20px; z-index: 50;
-        }
-        .viewer-toolbar i { cursor: pointer; }
-        .viewer-toolbar i.active { color: #ff3b30; }
-
-        /* --- Home Indicator --- */
-        .home-indicator {
-            position: absolute; bottom: 8px; left: 50%;
-            transform: translateX(-50%); width: 134px; height: 5px;
-            background-color: white; border-radius: 10px; cursor: pointer; z-index: 60;
-        }
-        a.home-indicator { display: block; text-decoration: none; }
+        .viewer-body { flex: 1; display: flex; justify-content: center; align-items: center; overflow: hidden; padding: 10px 0; position: relative; touch-action: pan-y; }
+        .viewer-body img { max-width: 100%; max-height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); font-size: 18px; color: rgba(255, 255, 255, 0.8); background: rgba(40, 40, 40, 0.5); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 55; backdrop-filter: blur(4px); }
+        .nav-btn.prev-btn { left: 12px; } .nav-btn.next-btn { right: 12px; } .nav-btn.disabled { opacity: 0; pointer-events: none; }
+        .viewer-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 28px 36px; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: #0a84ff; font-size: 20px; z-index: 50; }
+        .home-indicator { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; background-color: white; border-radius: 10px; cursor: pointer; z-index: 60; display: block; }
     </style>
 </head>
 <body>
     <div class="iphone">
-        <!-- Status Bar -->
         <div class="status-bar">
             <div class="status-left" id="clock-time">16:42</div>
-            <div class="status-right">
-                <i class="fa-solid fa-signal"></i>
-                <i class="fa-solid fa-wifi"></i>
-                <i class="fa-solid fa-battery-full"></i>
-            </div>
+            <div class="status-right"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div>
         </div>
 
-        <!-- Photos Main Container -->
         <div class="photos-container">
-
-            <!-- PAGE 1: หน้ารวมอัลบั้ม (My Albums) -->
             <div id="albums-overview-page" class="photos-page active">
                 <div class="gallery-header">
-                    <a href="index.html#home" class="album-back-btn"><i class="fa-solid fa-chevron-left"></i> Home</a>
-                    <span class="gallery-title">Albums</span>
-                    <div class="gallery-header-icons">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
+                    <a href="index.html#home" class="album-back-btn"><i class="fa-solid fa-chevron-left"></i> <span data-key="nav_home">Home</span></a>
+                    <span class="gallery-title" data-key="title_albums">Albums</span>
+                    <div class="gallery-header-icons"><i class="fa-solid fa-plus"></i></div>
                 </div>
-
-                <div class="albums-section-title">My Albums</div>
-                
-                <div class="albums-grid" id="albums-grid-container">
-                    <!-- Album Cards generated by JS -->
-                </div>
+                <div class="albums-section-title" data-key="my_albums">My Albums</div>
+                <div class="albums-grid" id="albums-grid-container"></div>
             </div>
 
-            <!-- PAGE 2: หน้าตารางรูปในอัลบั้ม (Album Photo Grid) -->
             <div id="album-detail-page" class="photos-page">
                 <div class="album-nav-header">
-                    <span class="album-back-btn" id="back-to-albums-btn">
-                        <i class="fa-solid fa-chevron-left"></i> Albums
-                    </span>
+                    <span class="album-back-btn" id="back-to-albums-btn"><i class="fa-solid fa-chevron-left"></i> <span data-key="title_albums">Albums</span></span>
                     <span class="album-nav-title" id="current-album-title">Album Name</span>
                     <i class="fa-solid fa-ellipsis" style="color: #0a84ff;"></i>
                 </div>
-
-                <div class="photo-grid" id="album-photo-grid">
-                    <!-- Photo items injected by JS -->
-                </div>
+                <div class="photo-grid" id="album-photo-grid"></div>
             </div>
-
         </div>
 
-        <!-- Fullscreen Photo Viewer Modal -->
         <div class="photo-viewer" id="photo-viewer">
             <div class="viewer-header">
-                <span class="viewer-back" id="close-viewer-btn">
-                    <i class="fa-solid fa-chevron-left"></i> Back
-                </span>
-                <div class="viewer-date-info">
-                    <div class="viewer-date" id="view-date">October 25, 2026</div>
-                    <div class="viewer-time" id="view-time">14:20</div>
-                </div>
+                <span class="viewer-back" id="close-viewer-btn"><i class="fa-solid fa-chevron-left"></i> <span data-key="btn_back">Back</span></span>
+                <div class="viewer-date-info"><div class="viewer-date" id="view-date">October 25, 2026</div><div class="viewer-time" id="view-time">14:20</div></div>
                 <i class="fa-solid fa-arrow-up-from-bracket" style="color: #0a84ff; cursor: pointer;"></i>
             </div>
-
-            <!-- เพิ่มปุ่มลูกศรครอบใน viewer-body -->
             <div class="viewer-body" id="viewer-body">
                 <div class="nav-btn prev-btn" id="prev-photo-btn"><i class="fa-solid fa-chevron-left"></i></div>
                 <img id="viewer-img" src="" alt="Full view">
                 <div class="nav-btn next-btn" id="next-photo-btn"><i class="fa-solid fa-chevron-right"></i></div>
             </div>
-
-            <div class="viewer-toolbar">
-                <i class="fa-solid fa-share"></i>
-                <i class="fa-regular fa-heart" id="fav-btn"></i>
-                <i class="fa-solid fa-sliders"></i>
-                <i class="fa-regular fa-trash-can"></i>
-            </div>
+            <div class="viewer-toolbar"><i class="fa-solid fa-share"></i><i class="fa-regular fa-heart" id="fav-btn"></i><i class="fa-solid fa-sliders"></i><i class="fa-regular fa-trash-can"></i></div>
         </div>
 
-        <!-- Home Bar -->
         <a href="index.html#home" class="home-indicator"></a>
     </div>
 
     <script>
-        // ฐานข้อมูลอัลบั้มรูปภาพ
-        const albumsData = [
-            {
-                id: "pjoe",
-                name: "พี่โจของนอร์ธ",
-                cover: "https://i.pinimg.com/1200x/af/97/3d/af973d950208b4c3340959f5ed7650dd.jpg",
-                photos: [
-                    { id: 101, url: "https://i.pinimg.com/1200x/af/97/3d/af973d950208b4c3340959f5ed7650dd.jpg", date: "Today", time: "16:10", isFav: true },
-                    { id: 102, url: "https://i.pinimg.com/736x/73/63/ee/7363ee65c289f8872abf2332c06487dd.jpg", date: "Yesterday", time: "18:25", isFav: false },
-                    { id: 103, url: "https://i.pinimg.com/1200x/9e/c3/63/9ec36379fa233ce7740ca3a29930d2fd.jpg", date: "October 22, 2026", time: "12:14", isFav: true },
-                    { id: 104, url: "https://i.pinimg.com/1200x/4c/82/76/4c8276cc77d3d03999a666f1ce7682a4.jpg", date: "October 20, 2026", time: "09:45", isFav: true },
-                    { id: 105, url: "https://i.pinimg.com/736x/1d/3b/22/1d3b224c4748d6b35260425936e8fb21.jpg", date: "October 18, 2026", time: "20:15", isFav: true },
-                    { id: 106, url: "https://i.pinimg.com/736x/a3/8f/96/a38f96a401e3ba254f9d9b92f6862636.jpg", date: "October 15, 2026", time: "14:30", isFav: true },
-                    { id: 107, url: "https://i.pinimg.com/736x/66/67/22/666722d50c7a3e9304fe03436309b0e6.jpg", date: "October 12, 2026", time: "11:00", isFav: true },
-                    { id: 108, url: "https://i.pinimg.com/736x/d5/18/a7/d518a78e129263423f61614eb9fd2bc4.jpg", date: "October 05, 2026", time: "17:50", isFav: true },
-                    { id: 109, url: "https://i.pinimg.com/736x/87/ec/13/87ec1389434c08d6d185859b6402e14d.jpg", date: "September 28, 2026", time: "13:20", isFav: true },
-                    { id: 110, url: "https://i.pinimg.com/1200x/32/23/1b/32231b2d9fdccee830b623c0bb3ad91e.jpg", date: "September 20, 2026", time: "15:45", isFav: true },
-                    { id: 111, url: "https://i.pinimg.com/736x/ee/7e/4e/ee7e4e9db940f5c88c1d9d2e23187544.jpg", date: "September 14, 2026", time: "19:10", isFav: true },
-                    { id: 112, url: "https://i.pinimg.com/1200x/aa/a5/f8/aaa5f8266cf46a9cbf56fea03f49e739.jpg", date: "September 08, 2026", time: "08:30", isFav: true },
-                    { id: 113, url: "https://i.pinimg.com/736x/51/6d/eb/516deb3f6c06dd374e974c4213d63969.jpg", date: "August 30, 2026", time: "21:15", isFav: true },
-                    { id: 114, url: "https://i.pinimg.com/1200x/1a/de/ec/1adeec4d4f1a5d6beeea982f0664f79f.jpg", date: "August 22, 2026", time: "12:40", isFav: true },
-                    { id: 115, url: "https://i.pinimg.com/736x/72/bf/cd/72bfcdd1d1705e243413056e2417af15.jpg", date: "August 15, 2026", time: "17:05", isFav: true },
-                    { id: 116, url: "https://i.pinimg.com/1200x/ca/38/cb/ca38cb4bfa2c8ad39eccd7833332c431.jpg", date: "August 03, 2026", time: "10:20", isFav: true },
-                    { id: 117, url: "https://i.pinimg.com/736x/d4/c4/ab/d4c4ab0b1b4a88a1e9a94da17fc58c85.jpg", date: "July 28, 2026", time: "22:50", isFav: true },
-                    { id: 118, url: "https://i.pinimg.com/1200x/68/44/02/6844022237279dadcd7c427dbd519561.jpg", date: "July 19, 2026", time: "14:15", isFav: true },
-                    { id: 119, url: "https://i.pinimg.com/1200x/41/1d/c5/411dc5adc4e7c40c923143e09a639250.jpg", date: "July 11, 2026", time: "09:00", isFav: true },
-                    { id: 120, url: "https://i.pinimg.com/736x/d7/59/68/d759688fca423b809cd1444eea88a1d6.jpg", date: "June 30, 2026", time: "18:35", isFav: true },
-                    { id: 121, url: "https://i.pinimg.com/1200x/14/8c/84/148c84dde7ae30433e1dd4403fd5a547.jpg", date: "June 21, 2026", time: "13:50", isFav: true },
-                    { id: 122, url: "https://i.pinimg.com/1200x/4b/a3/a4/4ba3a4b090e68630027a8d915231c35f.jpg", date: "June 14, 2026", time: "20:10", isFav: true },
-                    { id: 123, url: "https://i.pinimg.com/1200x/3c/f9/3f/3cf93f7f8d63c6a228b82feebf29b7e6.jpg", date: "June 02, 2026", time: "11:25", isFav: true },
-                    { id: 124, url: "https://i.pinimg.com/1200x/e5/d9/a9/e5d9a9e72c65d43d1f50e0dd92da1114.jpg", date: "May 25, 2026", time: "16:40", isFav: true },
-                    { id: 125, url: "https://i.pinimg.com/1200x/95/e0/29/95e0292aee93d7470b5692e0eef5b7b5.jpg", date: "May 18, 2026", time: "07:55", isFav: true },
-                    { id: 126, url: "https://i.pinimg.com/1200x/90/b4/22/90b422ba737c3cb54b76811eed89eb27.jpg", date: "May 04, 2026", time: "23:15", isFav: true },
-                    { id: 127, url: "https://i.pinimg.com/1200x/d6/70/3e/d6703ef5cde3aba5a145b6721cd6d27e.jpg", date: "April 27, 2026", time: "10:30", isFav: true },
-                    { id: 128, url: "https://i.pinimg.com/1200x/c6/19/8a/c6198a6420af3dcfe97fe3d689e0caec.jpg", date: "April 15, 2026", time: "19:45", isFav: true },
-                    { id: 129, url: "https://i.pinimg.com/1200x/d2/9b/cb/d29bcb63a59fc1ff883887d02affab5a.jpg", date: "April 01, 2026", time: "14:00", isFav: true },
-                    { id: 130, url: "https://i.pinimg.com/1200x/28/ae/c5/28aec5244d51c78e89e89bb1f06317c9.jpg", date: "April 01, 2026", time: "14:00", isFav: true }
-                ]
-            },
-            {
-                id: "prewedding",
-                name: "Prewedding",
-                cover: "https://i.pinimg.com/1200x/8d/bb/b8/8dbbb882929048c327e853120a4b5487.jpg",
-                photos: [
-                    { id: 201, url: "https://i.pinimg.com/1200x/8d/bb/b8/8dbbb882929048c327e853120a4b5487.jpg", date: "October 15, 2026", time: "10:00", isFav: true },
-                    { id: 202, url: "https://i.pinimg.com/1200x/1c/33/5f/1c335fcda9853822514cefbae30c64d4.jpg", date: "October 15, 2026", time: "11:30", isFav: false },
-                    { id: 203, url: "https://i.pinimg.com/736x/84/e1/21/84e1216d715e637d31dfbffb56332801.jpg", date: "October 15, 2026", time: "15:45", isFav: false },
-                    { id: 203, url: "https://i.pinimg.com/1200x/c2/07/d3/c207d32f187b792701c1584170ca2627.jpg", date: "October 15, 2026", time: "15:45", isFav: false }
-                ]
-            },
-            {
-                id: "meme",
-                name: "มีม101",
-                cover: "https://i.pinimg.com/736x/55/c9/a7/55c9a7afbf83f555170c3b96f4bdb7d9.jpg",
-                photos: [
-                            { id: 301, url: "https://i.pinimg.com/736x/55/c9/a7/55c9a7afbf83f555170c3b96f4bdb7d9.jpg", date: "October 20, 2026", time: "22:11", isFav: false },
-                            { id: 302, url: "https://i.pinimg.com/736x/9d/d5/10/9dd510ade6169a7af64ca55b51c93514.jpg", date: "October 18, 2026", time: "19:05", isFav: false },
-                            { id: 303, url: "https://i.pinimg.com/736x/4b/5d/85/4b5d85a6ce84296fea6feec9e20b2fcb.jpg", date: "October 16, 2026", time: "23:40", isFav: false },
-                            { id: 304, url: "https://i.pinimg.com/736x/73/bb/a9/73bba9a43221411f8a5c376c37df9de7.jpg", date: "October 12, 2026", time: "13:02", isFav: false },
-                            { id: 305, url: "https://i.pinimg.com/736x/4a/ea/24/4aea24fd22eaf145b5a4cb67fa0e746b.jpg", date: "October 08, 2026", time: "15:22", isFav: false },
-                            { id: 306, url: "https://i.pinimg.com/736x/c2/c6/2f/c2c62f0aa111b81f5ba6093420cefa98.jpg", date: "October 01, 2026", time: "08:14", isFav: false },
-                            { id: 307, url: "https://i.pinimg.com/1200x/c4/b0/e3/c4b0e39380eab7e27c9c2de7c7240850.jpg", date: "September 25, 2026", time: "21:30", isFav: true },
-                            { id: 308, url: "https://i.pinimg.com/1200x/af/a2/4b/afa24b78fcf40819eb793c17b421a015.jpg", date: "September 18, 2026", time: "17:45", isFav: false },
-                            { id: 309, url: "https://i.pinimg.com/736x/f1/7a/c3/f17ac39b4890c879ed1a08897fc38e70.jpg", date: "September 12, 2026", time: "11:10", isFav: false },
-                            { id: 310, url: "https://i.pinimg.com/736x/3f/be/af/3fbeaf9921ae007cf32591234814ead8.jpg", date: "September 05, 2026", time: "19:00", isFav: false },
-                            { id: 311, url: "https://i.pinimg.com/736x/11/36/a2/1136a207c7145123af0179e99783436c.jpg", date: "August 29, 2026", time: "14:25", isFav: true },
-                            { id: 312, url: "https://i.pinimg.com/736x/12/67/44/126744526cdabb61dee338ce384ab5ee.jpg", date: "August 20, 2026", time: "10:15", isFav: false },
-                            { id: 313, url: "https://i.pinimg.com/736x/55/f9/9f/55f99f605ad3fc70b7b52188f29076bc.jpg", date: "August 12, 2026", time: "22:05", isFav: false },
-                            { id: 314, url: "https://i.pinimg.com/736x/70/2f/8e/702f8e0bdace55fc080fcce47d31a0ec.jpg", date: "August 04, 2026", time: "16:40", isFav: false },
-                            { id: 315, url: "https://i.pinimg.com/1200x/b6/9c/3c/b69c3c1b35a9325195623a1e202b01c3.jpg", date: "July 19, 2026", time: "09:30", isFav: false },
-                            { id: 317, url: "https://i.pinimg.com/1200x/f4/a4/0e/f4a40e641d6db9cc2c50757bc339b47e.jpg", date: "July 11, 2026", time: "18:20", isFav: false },
-                            { id: 318, url: "https://i.pinimg.com/1200x/35/30/a4/3530a493062ce6a8716b903136c361c3.jpg", date: "June 30, 2026", time: "20:15", isFav: false },
-                            { id: 319, url: "https://i.pinimg.com/736x/ae/88/46/ae884658cf7bd4188af8234b9a4315ed.jpg", date: "June 20, 2026", time: "13:40", isFav: false },
-                            { id: 320, url: "https://i.pinimg.com/736x/26/04/88/2604885659cbffd8c246efcdec416757.jpg", date: "June 10, 2026", time: "11:05", isFav: true },
-                            { id: 321, url: "https://i.pinimg.com/1200x/21/8d/aa/218daaa209f7306f74fa3526be824d4c.jpg", date: "May 29, 2026", time: "17:30", isFav: false },
-                            { id: 322, url: "https://i.pinimg.com/1200x/14/e1/a2/14e1a2a18f33686e5d81726eb8025576.jpg", date: "May 15, 2026", time: "23:10", isFav: false },
-                            { id: 323, url: "https://i.pinimg.com/736x/65/27/e6/6527e6c959325fea9320da1e55bd08ec.jpg", date: "May 02, 2026", time: "15:00", isFav: false }
-                        ]
-            },
-            {
-                id: "4jiew",
-                name: "4จิ๋ว",
-                cover: "https://i.pinimg.com/1200x/b2/74/4a/b2744a8447eb64d5e04f6c4c4d3aeefc.jpg",
-                photos: [
-                        { id: 401, url: "https://i.pinimg.com/1200x/4c/3e/15/4c3e150d88d2d004359544381e6ed18d.jpg", date: "October 20, 2026", time: "18:00", isFav: true },
-                        { id: 402, url: "https://i.pinimg.com/1200x/1b/c8/eb/1bc8eb1a1f23035d8d51be51fcb6b60b.jpg", date: "October 10, 2026", time: "20:30", isFav: false },
-                        { id: 403, url: "https://i.pinimg.com/1200x/b2/74/4a/b2744a8447eb64d5e04f6c4c4d3aeefc.jpg", date: "October 05, 2026", time: "16:45", isFav: true },
-                        { id: 404, url: "https://i.pinimg.com/1200x/27/f4/d0/27f4d08d250bd0a7f0b2e8c35f2c66a2.jpg", date: "September 28, 2026", time: "19:15", isFav: false },
-                        { id: 405, url: "https://i.pinimg.com/1200x/9b/69/a6/9b69a60f4423d4d89a8e4a7c617a4b22.jpg", date: "September 20, 2026", time: "14:20", isFav: true },
-                        { id: 406, url: "https://i.pinimg.com/1200x/db/6f/c2/db6fc2500fab70833722c2442a69e397.jpg", date: "September 15, 2026", time: "12:00", isFav: false },
-                        { id: 407, url: "https://i.pinimg.com/1200x/78/38/1f/78381f4917320837a567e0a6fa6c7ea9.jpg", date: "September 08, 2026", time: "17:50", isFav: true },
-                        { id: 408, url: "https://i.pinimg.com/1200x/4a/ce/e0/4acee022490b5670e243d20352e92287.jpg", date: "August 30, 2026", time: "21:10", isFav: false },
-                        { id: 409, url: "https://i.pinimg.com/1200x/d5/02/93/d5029317b3ac6079079c221d10f315c7.jpg", date: "August 22, 2026", time: "15:30", isFav: true },
-                        { id: 410, url: "https://i.pinimg.com/1200x/57/e3/26/57e3268bae4ecccc2d1e1643cfa0cc3f.jpg", date: "August 14, 2026", time: "11:05", isFav: false }
-                    ]
-            },
-            {
-                id: "camera",
-                name: "กล้อง",
-                cover: "https://i.pinimg.com/1200x/ac/13/d6/ac13d6cc460123ce3f165de1c540818a.jpg",
-                photos: [
-                            { id: 501, url: "https://i.pinimg.com/1200x/17/50/6d/17506df4e8d2427eacc962b1e07b84f0.jpg", date: "Today", time: "11:05", isFav: false },
-                            { id: 502, url: "https://i.pinimg.com/1200x/f7/57/2b/f7572b6c3f5e65bad421295f2693fbe5.jpg", date: "Today", time: "09:30", isFav: false },
-                            { id: 503, url: "https://i.pinimg.com/1200x/ac/13/d6/ac13d6cc460123ce3f165de1c540818a.jpg", date: "October 19, 2026", time: "14:20", isFav: false },
-                            { id: 504, url: "https://i.pinimg.com/736x/6c/ed/b7/6cedb7d359c1ba72023488ef1387d8f8.jpg", date: "October 18, 2026", time: "16:45", isFav: true },
-                            { id: 505, url: "https://i.pinimg.com/736x/a7/32/4c/a7324c6198de6d09cd6032248c5b0cf1.jpg", date: "October 17, 2026", time: "10:12", isFav: false },
-                            { id: 506, url: "https://i.pinimg.com/1200x/e9/bc/22/e9bc222721b1281f0d27814f777f1bc9.jpg", date: "October 15, 2026", time: "18:30", isFav: false },
-                            { id: 507, url: "https://i.pinimg.com/1200x/a4/a1/35/a4a135c8a61297b59ad83d3ccef4715f.jpg", date: "October 12, 2026", time: "08:15", isFav: true },
-                            { id: 508, url: "https://i.pinimg.com/736x/93/17/bc/9317bc14951449df8a126b6cd1e90357.jpg", date: "October 10, 2026", time: "12:00", isFav: false },
-                            { id: 509, url: "https://i.pinimg.com/1200x/3f/87/a8/3f87a849b9f506d47bc4398350fef370.jpg", date: "October 08, 2026", time: "15:20", isFav: false },
-                            { id: 510, url: "https://i.pinimg.com/1200x/e5/56/59/e556594f0de87c2e9c1f465b8a13fbf4.jpg", date: "October 05, 2026", time: "09:40", isFav: true },
-                            { id: 511, url: "https://i.pinimg.com/736x/3f/04/de/3f04dee0e6e2c64bec8eda2a2d0861a2.jpg", date: "October 01, 2026", time: "17:10", isFav: false },
-                            { id: 512, url: "https://i.pinimg.com/1200x/19/32/8c/19328c57990a60e6e66b9256a17b8235.jpg", date: "September 28, 2026", time: "11:25", isFav: false },
-                            { id: 513, url: "https://i.pinimg.com/1200x/e0/34/7a/e0347af6e6aada5a69db148ad8b08843.jpg", date: "September 24, 2026", time: "14:50", isFav: true },
-                            { id: 514, url: "https://i.pinimg.com/1200x/8d/39/6d/8d396d6eae8d56af75b115985d367d49.jpg", date: "September 20, 2026", time: "19:05", isFav: false },
-                            { id: 515, url: "https://i.pinimg.com/1200x/8c/b6/a7/8cb6a72aea107d90871ef28a6084060b.jpg", date: "September 15, 2026", time: "08:30", isFav: false },
-                            { id: 516, url: "https://i.pinimg.com/736x/25/5a/28/255a28169300c8306878f5f6e3ec79fa.jpg", date: "September 10, 2026", time: "13:15", isFav: true },
-                            { id: 517, url: "https://i.pinimg.com/1200x/06/ad/da/06adda2e852a9fbd1ea9869128acaad4.jpg", date: "September 02, 2026", time: "16:00", isFav: false },
-                            { id: 518, url: "https://i.pinimg.com/736x/63/77/55/637755621915aeeebb2b91a6cfc29e98.jpg", date: "August 28, 2026", time: "10:45", isFav: false },
-                            { id: 519, url: "https://i.pinimg.com/736x/71/da/15/71da1596cf4121be6cc5eaca8da1d5fb.jpg", date: "August 20, 2026", time: "21:30", isFav: true },
-                            { id: 520, url: "https://i.pinimg.com/736x/5a/19/77/5a1977087d30f105fef463ee844eee13.jpg", date: "August 14, 2026", time: "12:10", isFav: false },
-                            { id: 521, url: "https://i.pinimg.com/1200x/75/bd/7c/75bd7cf8263a6d0260e5fa332b341cef.jpg", date: "August 05, 2026", time: "15:25", isFav: false },
-                            { id: 522, url: "https://i.pinimg.com/1200x/72/3f/1a/723f1a1cd552dd88fe891d0a16705856.jpg", date: "July 30, 2026", time: "09:15", isFav: true },
-                            { id: 523, url: "https://i.pinimg.com/736x/4c/d4/9e/4cd49ec11ea204f61d48f7fae659f534.jpg", date: "July 22, 2026", time: "18:40", isFav: false },
-                            { id: 524, url: "https://i.pinimg.com/1200x/b2/74/4a/b2744a8447eb64d5e04f6c4c4d3aeefc.jpg", date: "July 15, 2026", time: "11:50", isFav: false },
-                            { id: 525, url: "https://i.pinimg.com/1200x/27/f4/d0/27f4d08d250bd0a7f0b2e8c35f2c66a2.jpg", date: "July 01, 2026", time: "14:05", isFav: true },
-                            { id: 526, url: "https://i.pinimg.com/1200x/9b/69/a6/9b69a60f4423d4d89a8e4a7c617a4b22.jpg", date: "June 25, 2026", time: "17:35", isFav: false },
-                            { id: 527, url: "https://i.pinimg.com/1200x/db/6f/c2/db6fc2500fab70833722c2442a69e397.jpg", date: "June 18, 2026", time: "08:20", isFav: false },
-                            { id: 528, url: "https://i.pinimg.com/736x/4f/c0/88/4fc088c014c5d1e04e946e5ccfeedf24.jpg", date: "June 10, 2026", time: "20:00", isFav: true },
-                            { id: 529, url: "https://i.pinimg.com/1200x/68/10/1b/68101ba15684d9914b03abcfe7b7d0e2.jpg", date: "May 28, 2026", time: "13:45", isFav: false },
-                            { id: 530, url: "https://i.pinimg.com/736x/2e/e5/c9/2ee5c9f2fba342b0c0ff5af0060b1569.jpg", date: "May 15, 2026", time: "10:30", isFav: false }
-                        ]
-            }
+        const uiTrans = {
+            th: { nav_home: "หน้าแรก", title_albums: "อัลบั้ม", my_albums: "อัลบั้มของฉัน", fav_name: "❤️ รายการโปรด", btn_back: "กลับ", p_joe: "พี่โจของนอร์ธ", p_prewedding: "Prewedding", p_meme: "มีม101", p_4jiw: "4จิ๋ว", p_camera: "กล้อง" },
+            en: { nav_home: "Home", title_albums: "Albums", my_albums: "My Albums", fav_name: "❤️ Favorites", btn_back: "Back", p_joe: "North's P'Joe", p_prewedding: "Prewedding", p_meme: "Memes 101", p_4jiw: "4 Chibi", p_camera: "Camera" },
+            ja: { nav_home: "ホーム", title_albums: "アルバム", my_albums: "マイアルバム", fav_name: "❤️ お気に入り", btn_back: "戻る", p_joe: "ノースのジョー先輩", p_prewedding: "前撮り写真", p_meme: "ミーム101", p_4jiw: "4ちび", p_camera: "カメラ" },
+            ko: { nav_home: "홈", title_albums: "앨범", my_albums: "나의 앨범", fav_name: "❤️ 즐겨찾기", btn_back: "뒤로", p_joe: "노스의 조 형", p_prewedding: "웨딩 스냅", p_meme: "밈 101", p_4jiw: "4꼬맹이", p_camera: "카메라" },
+            zh: { nav_home: "主页", title_albums: "相册", my_albums: "我的相册", fav_name: "❤️ 个人收藏", btn_back: "返回", p_joe: "诺斯的 Johan 哥", p_prewedding: "婚纱照", p_meme: "表情包 101", p_4jiw: "4小只", p_camera: "相机" }
+        };
+
+        const rawAlbums = [
+            { id: "pjoe", key: "p_joe", cover: "https://i.pinimg.com/1200x/af/97/3d/af973d950208b4c3340959f5ed7650dd.jpg", photos: [{ id: 101, url: "https://i.pinimg.com/1200x/af/97/3d/af973d950208b4c3340959f5ed7650dd.jpg", date: "Today", time: "16:10", isFav: true }, { id: 102, url: "https://i.pinimg.com/736x/73/63/ee/7363ee65c289f8872abf2332c06487dd.jpg", date: "Yesterday", time: "18:25", isFav: false }] },
+            { id: "prewedding", key: "p_prewedding", cover: "https://i.pinimg.com/1200x/8d/bb/b8/8dbbb882929048c327e853120a4b5487.jpg", photos: [{ id: 201, url: "https://i.pinimg.com/1200x/8d/bb/b8/8dbbb882929048c327e853120a4b5487.jpg", date: "October 15, 2026", time: "10:00", isFav: true }] },
+            { id: "meme", key: "p_meme", cover: "https://i.pinimg.com/736x/55/c9/a7/55c9a7afbf83f555170c3b96f4bdb7d9.jpg", photos: [{ id: 301, url: "https://i.pinimg.com/736x/55/c9/a7/55c9a7afbf83f555170c3b96f4bdb7d9.jpg", date: "October 20, 2026", time: "22:11", isFav: false }] },
+            { id: "4jiew", key: "p_4jiw", cover: "https://i.pinimg.com/1200x/b2/74/4a/b2744a8447eb64d5e04f6c4c4d3aeefc.jpg", photos: [{ id: 401, url: "https://i.pinimg.com/1200x/4c/3e/15/4c3e150d88d2d004359544381e6ed18d.jpg", date: "October 20, 2026", time: "18:00", isFav: true }] },
+            { id: "camera", key: "p_camera", cover: "https://i.pinimg.com/1200x/ac/13/d6/ac13d6cc460123ce3f165de1c540818a.jpg", photos: [{ id: 501, url: "https://i.pinimg.com/1200x/17/50/6d/17506df4e8d2427eacc962b1e07b84f0.jpg", date: "Today", time: "11:05", isFav: false }] }
         ];
 
-        // ตัวแปรควบคุมระบบเลื่อนรูปภาพ
-        let currentPhotoList = [];
-        let currentPhotoIndex = 0;
-        let currentActivePhoto = null;
+        let currentPhotoList = [], currentPhotoIndex = 0;
 
-        // นาฬิกา
-        function updateClock() {
-            const now = new Date();
-            let h = now.getHours().toString().padStart(2, '0');
-            let m = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('clock-time').textContent = `${h}:${m}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // คำนวณรูปภาพในอัลบั้ม "รายการโปรด"
-        function getFavoritePhotos() {
-            let favs = [];
-            albumsData.forEach(album => {
-                album.photos.forEach(photo => {
-                    if (photo.isFav) favs.push(photo);
-                });
-            });
-            return favs;
-        }
-
-        // แสดงผลรายการอัลบั้มทั้งหมด
         function renderAlbumsGrid() {
+            const lang = localStorage.getItem('selectedLanguage') || 'th';
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (uiTrans[lang] && uiTrans[lang][key]) el.textContent = uiTrans[lang][key];
+            });
+
             const container = document.getElementById('albums-grid-container');
             if (!container) return;
             container.innerHTML = '';
 
-            const favPhotos = getFavoritePhotos();
-            const favCover = favPhotos.length > 0 ? favPhotos[0].url : "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600&auto=format&fit=crop";
-            
+            let favs = [];
+            rawAlbums.forEach(a => a.photos.forEach(p => { if (p.isFav) favs.push(p); }));
+            const favCover = favs.length > 0 ? favs[0].url : "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600&auto=format&fit=crop";
+
             const favCard = document.createElement('div');
             favCard.className = 'album-card';
-            favCard.onclick = () => openAlbumDetail('favorites', 'รายการโปรด', favPhotos);
-            favCard.innerHTML = `
-                <div class="album-cover">
-                    <img src="${favCover}" alt="Favorites">
-                </div>
-                <div class="album-name">❤️ รายการโปรด</div>
-                <div class="album-count">${favPhotos.length}</div>
-            `;
+            favCard.onclick = () => openAlbumDetail('favorites', uiTrans[lang].fav_name, favs);
+            favCard.innerHTML = `<div class="album-cover"><img src="${favCover}"></div><div class="album-name">${uiTrans[lang].fav_name}</div><div class="album-count">${favs.length}</div>`;
             container.appendChild(favCard);
 
-            albumsData.forEach(album => {
+            rawAlbums.forEach(a => {
+                const name = uiTrans[lang][a.key] || a.key;
                 const card = document.createElement('div');
                 card.className = 'album-card';
-                card.onclick = () => openAlbumDetail(album.id, album.name, album.photos);
-                card.innerHTML = `
-                    <div class="album-cover">
-                        <img src="${album.cover}" alt="${album.name}">
-                    </div>
-                    <div class="album-name">${album.name}</div>
-                    <div class="album-count">${album.photos.length}</div>
-                `;
+                card.onclick = () => openAlbumDetail(a.id, name, a.photos);
+                card.innerHTML = `<div class="album-cover"><img src="${a.cover}"></div><div class="album-name">${name}</div><div class="album-count">${a.photos.length}</div>`;
                 container.appendChild(card);
             });
         }
 
-        // เปิดเข้าดูรูปตารางภายในอัลบั้ม
         function openAlbumDetail(albumId, albumName, photos) {
             currentPhotoList = photos;
             document.getElementById('current-album-title').textContent = albumName;
             const gridContainer = document.getElementById('album-photo-grid');
             gridContainer.innerHTML = '';
-
-            if (photos.length === 0) {
-                gridContainer.innerHTML = '<div style="color:#8e8e93; grid-column:1/-1; text-align:center; padding:40px 0; font-size:14px;">ไม่มีรูปภาพ</div>';
-            } else {
-                photos.forEach((photo, idx) => {
-                    const item = document.createElement('div');
-                    item.className = 'photo-grid-item';
-                    item.onclick = () => openPhotoViewer(idx); // ส่ง index แทนการส่งวัตถุ
-                    item.innerHTML = `<img src="${photo.url}" alt="Photo">`;
-                    gridContainer.appendChild(item);
-                });
-            }
-
+            photos.forEach((photo, idx) => {
+                const item = document.createElement('div');
+                item.className = 'photo-grid-item';
+                item.onclick = () => openPhotoViewer(idx);
+                item.innerHTML = `<img src="${photo.url}">`;
+                gridContainer.appendChild(item);
+            });
             document.getElementById('albums-overview-page').classList.remove('active');
             document.getElementById('album-detail-page').classList.add('active');
         }
 
-        // ปุ่มย้อนกลับไปหน้ารวมอัลบั้ม
         document.getElementById('back-to-albums-btn').addEventListener('click', () => {
             renderAlbumsGrid();
             document.getElementById('album-detail-page').classList.remove('active');
             document.getElementById('albums-overview-page').classList.add('active');
         });
 
-        // เปิดดูรูปขยายเต็มหน้าจอ (Viewer)
         function openPhotoViewer(index) {
-            if (!currentPhotoList || currentPhotoList.length === 0) return;
             currentPhotoIndex = index;
             updateViewerContent();
             document.getElementById('photo-viewer').classList.add('active');
         }
 
-        // อัปเดตข้อมูลรูปภาพและปุ่มนำทางตามตำแหน่งปัจจุบัน
         function updateViewerContent() {
             const photo = currentPhotoList[currentPhotoIndex];
             if (!photo) return;
-
-            currentActivePhoto = photo;
-            const imgEl = document.getElementById('viewer-img');
-            imgEl.style.opacity = '0.4';
-            
-            setTimeout(() => {
-                imgEl.src = photo.url;
-                imgEl.style.opacity = '1';
-            }, 80);
-
+            document.getElementById('viewer-img').src = photo.url;
             document.getElementById('view-date').textContent = photo.date;
             document.getElementById('view-time').textContent = photo.time;
-
-            const favBtn = document.getElementById('fav-btn');
-            if (photo.isFav) {
-                favBtn.className = 'fa-solid fa-heart active';
-            } else {
-                favBtn.className = 'fa-regular fa-heart';
-            }
-
-            // จัดการซ่อน/แสดงปุ่มกดเลื่อน
-            const prevBtn = document.getElementById('prev-photo-btn');
-            const nextBtn = document.getElementById('next-photo-btn');
-            if (prevBtn) prevBtn.classList.toggle('disabled', currentPhotoIndex === 0);
-            if (nextBtn) nextBtn.classList.toggle('disabled', currentPhotoIndex === currentPhotoList.length - 1);
         }
 
-        // ฟังก์ชันเลื่อนรูป
-        function prevPhoto() {
-            if (currentPhotoIndex > 0) {
-                currentPhotoIndex--;
-                updateViewerContent();
-            }
-        }
-
-        function nextPhoto() {
-            if (currentPhotoIndex < currentPhotoList.length - 1) {
-                currentPhotoIndex++;
-                updateViewerContent();
-            }
-        }
-
-        // Event Listeners ปุ่มลูกศร
-        document.getElementById('prev-photo-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            prevPhoto();
-        });
-        document.getElementById('next-photo-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            nextPhoto();
-        });
-
-        // ระบบปัดซ้าย-ขวาบนทัชสกรีน (Swipe Gesture)
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const viewerBody = document.getElementById('viewer-body');
-
-        if (viewerBody) {
-            viewerBody.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            }, false);
-
-            viewerBody.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, false);
-        }
-
-        function handleSwipe() {
-            const threshold = 35; // ระยะพิกเซลปัดขั้นต่ำ
-            if (touchEndX < touchStartX - threshold) {
-                nextPhoto(); // ปัดซ้าย -> ดูรูปถัดไป
-            } else if (touchEndX > touchStartX + threshold) {
-                prevPhoto(); // ปัดขวา -> ดูรูปก่อนหน้า
-            }
-        }
-
-        // ปิดหน้าดูรูป
         document.getElementById('close-viewer-btn').addEventListener('click', () => {
             document.getElementById('photo-viewer').classList.remove('active');
         });
 
-        // กดปุ่มหัวใจ ❤️ เพื่อเพิ่ม/เอาออกจากรายการโปรด
-        document.getElementById('fav-btn').addEventListener('click', function() {
-            if (!currentActivePhoto) return;
-            currentActivePhoto.isFav = !currentActivePhoto.isFav;
-
-            if (currentActivePhoto.isFav) {
-                this.className = 'fa-solid fa-heart active';
-            } else {
-                this.className = 'fa-regular fa-heart';
-            }
-        });
-
-        // โหลดครั้งแรก
-        renderAlbumsGrid();
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock-time').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000); updateClock(); renderAlbumsGrid();
     </script>
 </body>
 </html>

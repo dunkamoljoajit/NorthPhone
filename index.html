@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="responsive.css">
+    <style>
+        /* CSS สำหรับปุ่มเปลี่ยนภาษาสไตล์ iOS */
+        .lang-picker {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 12px;
+            margin: 10px auto 5px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 16px;
+            width: fit-content;
+            z-index: 10;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lang-btn:hover, .lang-btn.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.25);
+        }
+    </style>
 </head>
 <body>
     <div class="iphone">
@@ -46,7 +77,7 @@
                 <div class="lock-icon-btn"><i class="fa-solid fa-flashlight"></i></div>
                 <div class="swipe-text" id="swipe-up-area">
                     <div class="swipe-bar"></div>
-                    <span>Swipe up to unlock</span>
+                    <span data-key="swipe_unlock">Swipe up to unlock</span>
                 </div>
                 <div class="lock-icon-btn"><i class="fa-solid fa-camera"></i></div>
             </div>
@@ -54,7 +85,7 @@
 
         <!-- 2. Passcode Screen -->
         <div class="passcode-screen" id="passcode-screen">
-            <div class="passcode-title">Enter Passcode</div>
+            <div class="passcode-title" data-key="passcode_title">Enter Passcode</div>
             <div class="passcode-dots" id="passcode-dots">
                 <div class="dot"></div><div class="dot"></div><div class="dot"></div>
                 <div class="dot"></div><div class="dot"></div><div class="dot"></div>
@@ -71,12 +102,173 @@
                 <div class="key" data-num="9"><span class="num">9</span><span class="letters">W X Y Z</span></div>
                 <div class="key empty"></div>
                 <div class="key" data-num="0"><span class="num">0</span><span class="letters"></span></div>
-                <div class="key action" id="cancel-passcode">Cancel</div>
+                <div class="key action" id="cancel-passcode" data-key="cancel">Cancel</div>
             </div>
         </div>
 
         <!-- 3. Home Screen -->
         <div class="home-screen" id="home-screen">
+            
+            <!-- ปุ่มกดแปลภาษาแบบ aA (Safari Style) -->
+            <button class="safari-translate-trigger" onclick="openTranslateModal()">
+                <span class="aa-icon">aA</span>
+                <span data-key="translate_label">แปลภาษา</span>
+            </button>
+
+            <!-- หน้าต่าง Action Sheet เด้งขึ้นมาจากด้านล่าง (Safari Translate Sheet) -->
+            <div class="translate-modal-overlay" id="translate-modal" onclick="closeTranslateModal(event)">
+                <div class="translate-sheet" onclick="event.stopPropagation()">
+                    <div class="sheet-header">
+                        <span data-key="translate_sheet_title">แปลภาษาหน้าเว็บ</span>
+                        <button class="sheet-close-btn" onclick="closeTranslateModal()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="lang-options-list">
+                        <button class="lang-option-item" id="opt-th" onclick="selectLanguage('th')">
+                            <span>🇹🇭 ภาษาไทย (Thai)</span>
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </button>
+                        <button class="lang-option-item" id="opt-en" onclick="selectLanguage('en')">
+                            <span>🇺🇸 English</span>
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </button>
+                        <button class="lang-option-item" id="opt-ja" onclick="selectLanguage('ja')">
+                            <span>🇯🇵 日本語 (Japanese)</span>
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </button>
+                        <button class="lang-option-item" id="opt-ko" onclick="selectLanguage('ko')">
+                            <span>🇰🇷 한국어 (Korean)</span>
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </button>
+                        <button class="lang-option-item" id="opt-zh" onclick="selectLanguage('zh')">
+                            <span>🇨🇳 中文 (Chinese)</span>
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                /* ปุ่มกดเปิดแปลภาษาแบบ Safari 'aA' */
+                .safari-translate-trigger {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    margin: 10px auto 4px;
+                    padding: 6px 14px;
+                    background: rgba(255, 255, 255, 0.18);
+                    backdrop-filter: blur(15px);
+                    -webkit-backdrop-filter: blur(15px);
+                    border: 0.5px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 20px;
+                    color: white;
+                    font-size: 12px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    z-index: 10;
+                    transition: background 0.2s;
+                }
+                .safari-translate-trigger:active {
+                    background: rgba(255, 255, 255, 0.3);
+                }
+                .aa-icon {
+                    font-weight: 700;
+                    font-size: 13px;
+                    letter-spacing: -0.5px;
+                }
+
+                /* Backdrop พื้นหลังสีดำจางๆ */
+                .translate-modal-overlay {
+                    position: absolute;
+                    top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0, 0, 0, 0.45);
+                    backdrop-filter: blur(4px);
+                    -webkit-backdrop-filter: blur(4px);
+                    z-index: 100;
+                    display: flex;
+                    align-items: flex-end;
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.25s ease;
+                }
+                .translate-modal-overlay.active {
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+
+                /* แผ่นเมนูเด้งขึ้นมาจากล่างสุด (iOS Action Sheet) */
+                .translate-sheet {
+                    width: 100%;
+                    background: rgba(28, 28, 30, 0.94);
+                    backdrop-filter: blur(25px);
+                    -webkit-backdrop-filter: blur(25px);
+                    border-top-left-radius: 24px;
+                    border-top-right-radius: 24px;
+                    padding: 18px 16px 30px;
+                    border-top: 0.5px solid rgba(255, 255, 255, 0.15);
+                    transform: translateY(100%);
+                    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+                }
+                .translate-modal-overlay.active .translate-sheet {
+                    transform: translateY(0);
+                }
+
+                .sheet-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-bottom: 14px;
+                    padding: 0 4px;
+                }
+                .sheet-close-btn {
+                    background: rgba(255, 255, 255, 0.12);
+                    border: none;
+                    color: rgba(255, 255, 255, 0.8);
+                    width: 26px; height: 26px;
+                    border-radius: 50%;
+                    display: flex; align-items: center; justify-content: center;
+                    cursor: pointer; font-size: 13px;
+                }
+
+                /* รายการภาษาให้เลือก */
+                .lang-options-list {
+                    display: flex;
+                    flex-direction: column;
+                    background: rgba(255, 255, 255, 0.08);
+                    border-radius: 14px;
+                    overflow: hidden;
+                }
+                .lang-option-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 13px 16px;
+                    background: transparent;
+                    border: none;
+                    border-bottom: 0.5px solid rgba(255, 255, 255, 0.08);
+                    color: white;
+                    font-size: 14px;
+                    cursor: pointer;
+                    text-align: left;
+                }
+                .lang-option-item:last-child {
+                    border-bottom: none;
+                }
+                .lang-option-item:active {
+                    background: rgba(255, 255, 255, 0.15);
+                }
+                .check-icon {
+                    color: #0a84ff;
+                    font-size: 14px;
+                    display: none;
+                }
+                .lang-option-item.selected .check-icon {
+                    display: inline-block;
+                }
+            </style>
+
             <div class="app-grid">
                 <!-- Phone -->
                 <div class="app" data-app="phone">
@@ -84,7 +276,7 @@
                         <img src="assets/icons/Phone.jpg" alt="Phone" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon icon-phone" style="display:none;"><i class="fa-solid fa-phone"></i></div>
                     </div>
-                    <span>Phone</span>
+                    <span data-key="app_phone">Phone</span>
                 </div>
                 <!-- Messages -->
                 <div class="app" data-app="messages">
@@ -92,7 +284,7 @@
                         <img src="assets/icons/messages.jpg" alt="Messages" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon icon-messages" style="display:none;"><i class="fa-solid fa-comment"></i></div>
                     </div>
-                    <span>Messages</span>
+                    <span data-key="app_messages">Messages</span>
                 </div>
                 <!-- Safari -->
                 <div class="app" data-app="safari">
@@ -108,7 +300,7 @@
                         <img src="assets/icons/camera.jpg" alt="Camera" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon icon-camera" style="display:none;"><i class="fa-solid fa-camera"></i></div>
                     </div>
-                    <span>Camera</span>
+                    <span data-key="app_camera">Camera</span>
                 </div>
                 <!-- Settings -->
                 <div class="app" data-app="settings">
@@ -116,7 +308,7 @@
                         <img src="assets/icons/setting.jpg" alt="Settings" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon icon-settings" style="display:none;"><i class="fa-solid fa-gear"></i></div>
                     </div>
-                    <span>Settings</span>
+                    <span data-key="app_settings">Settings</span>
                 </div>
                 <!-- Notes App -->
                 <div class="app" data-app="notes" onclick="window.location.href='note.html'" style="cursor: pointer;">
@@ -124,7 +316,7 @@
                         <img src="assets/icons/note.jpg" alt="Notes" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon icon-notes" style="display:none;"><i class="fa-solid fa-note-sticky"></i></div>
                     </div>
-                    <span>Notes</span>
+                    <span data-key="app_notes">Notes</span>
                 </div>
                 <!-- Photos -->
                 <div class="app" data-app="photos" onclick="window.location.href='photo.html'" style="cursor: pointer;">
@@ -132,7 +324,7 @@
                         <img src="assets/icons/Photo.jpg" alt="Photos" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon icon-photos" style="display:none;"><i class="fa-solid fa-photo-film"></i></div>
                     </div>
-                    <span>Photos</span>
+                    <span data-key="app_photos">Photos</span>
                 </div>
                 <!-- LINE -->
                 <div class="app" data-app="line" onclick="window.location.href='Line.html'" style="cursor: pointer;">
@@ -156,7 +348,7 @@
                         <img src="assets/icons/Weather.jpg" alt="Weather" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon weather-grad" style="display:none;"><i class="fa-solid fa-cloud-sun"></i></div>
                     </div>
-                    <span>Weather</span>
+                    <span data-key="app_weather">Weather</span>
                 </div>
                 <!-- Music -->
                 <div class="app" data-app="music">
@@ -164,12 +356,11 @@
                         <img src="assets/icons/Music.jpg" alt="Music" class="app-icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon music-grad" style="display:none;"><i class="fa-solid fa-music"></i></div>
                     </div>
-                    <span>Music</span>
+                    <span data-key="app_music">Music</span>
                 </div>
                 <!-- Webtoon -->
                 <div class="app" data-app="webtoon">
                     <div class="app-icon">
-                        <!-- เพิ่ม style ซูมรูปเข้าไปตรงนี้ -->
                         <img src="assets/icons/webtoon.jpg" alt="Webtoon" class="app-icon-img" style="transform: scale(1.35);" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="fallback-icon" style="display:none; background-color: #00dc64; color: white;">
                             <i class="fa-regular fa-face-smile"></i>
@@ -202,7 +393,7 @@
             <!-- Search Pill Bar -->
             <div class="search-pill">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <span>Search</span>
+                <span data-key="search">Search</span>
             </div>
 
             <!-- Dock -->
@@ -234,7 +425,6 @@
             </div>
         </div>
 
-
         <!-- 5. Notification Center Overlay -->
         <div class="notification-center-overlay" id="nc-overlay">
             <div class="lock-header">
@@ -250,7 +440,7 @@
                     </div>
                     <div class="notif-body">
                         <div class="notif-title">Johan</div>
-                        <div class="notif-message">Sent you a message.</div>
+                        <div class="notif-message" data-key="notif_johan">Sent you a message.</div>
                     </div>
                 </div>
             </div>
@@ -260,7 +450,6 @@
         <!-- 6. Control Center Overlay -->
         <div class="control-center-overlay" id="cc-overlay">
           <div class="control-center">
-                    <!-- แถวที่ 1 & 2 (ส่วนเชื่อมต่อ และ เพลงที่ปิดอยู่) -->
                     <div class="module squircle-2x2 network-group">
                         <div class="icon-btn inactive"><i class="fa-solid fa-plane"></i></div>
                         <div class="icon-btn active-blue"><i class="fa-solid fa-satellite-dish"></i></div>
@@ -274,15 +463,13 @@
                         </div>
                         <div class="media-empty-center">
                             <i class="fa-solid fa-music"></i>
-                            <span>Not Playing</span>
+                            <span data-key="not_playing">Not Playing</span>
                         </div>
                     </div>
 
-                    <!-- แถวที่ 3 (ปุ่มล็อคหมุนจอพื้นแดง และสะท้อนหน้าจอ) -->
                     <div class="module circle" style="background: #ff3b30; color: white;"><i class="fa-solid fa-lock"></i></div>
                     <div class="module circle inactive"><i class="fa-solid fa-clone"></i></div>
 
-                    <!-- แถบเลื่อน แสง/เสียง (กินพื้นที่แถวที่ 3 & 4) -->
                     <div class="module pill-1x2 slider brightness" id="brightness-slider">
                         <div class="slider-fill" id="brightness-fill" style="height: 50%;"></div>
                         <i class="fa-regular fa-sun slider-icon"></i>
@@ -292,43 +479,38 @@
                         <i class="fa-solid fa-volume-high slider-icon"></i>
                     </div>
 
-                    <!-- แถวที่ 4 (Focus) -->
                     <div class="module pill-2x1 focus-group" style="justify-content: space-between; padding: 0 16px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <div class="focus-icon"><i class="fa-solid fa-moon"></i></div>
-                            <span style="font-weight: 500; font-size: 15px;">Focus</span>
+                            <span style="font-weight: 500; font-size: 15px;" data-key="focus">Focus</span>
                         </div>
                         <i class="fa-solid fa-ellipsis" style="opacity: 0.5;"></i>
                     </div>
 
-                    <!-- แถวที่ 5 (ประตูบ้าน, ไฟฉาย, รีโมท Apple TV) -->
                     <div class="module pill-2x1 home-group">
                         <div class="home-icon"><i class="fa-solid fa-lock"></i></div>
                         <div class="home-text">
-                            <span class="home-title">Entrance</span>
-                            <span class="home-desc">Door Locked</span>
+                            <span class="home-title" data-key="entrance">Entrance</span>
+                            <span class="home-desc" data-key="door_locked">Door Locked</span>
                         </div>
                     </div>
                     <div class="module circle inactive"><i class="fa-solid fa-flashlight"></i></div>
                     <div class="module circle inactive"><i class="fa-solid fa-tv"></i></div>
 
-                    <!-- แถวที่ 6 (ลำโพงห้องนอน, เครื่องคิดเลข, สแกน QR) -->
                     <div class="module pill-2x1 home-group">
                         <div class="home-icon"><i class="fa-solid fa-volume-low"></i></div>
                         <div class="home-text">
-                            <span class="home-title">Bedroom</span>
-                            <span class="home-desc">Speaker Not Playing</span>
+                            <span class="home-title" data-key="bedroom">Bedroom</span>
+                            <span class="home-desc" data-key="speaker_off">Speaker Not Playing</span>
                         </div>
                     </div>
                     <div class="module circle inactive"><i class="fa-solid fa-calculator"></i></div>
                     <div class="module circle inactive"><i class="fa-solid fa-qrcode"></i></div>
 
-                    <!-- แถวที่ 7 (อัดหน้าจอ, กล้องถ่ายรูป) -->
                     <div class="module circle inactive"><i class="fa-solid fa-bullseye"></i></div>
                     <div class="module circle inactive"><i class="fa-solid fa-camera"></i></div>
                 </div>
 
-                <!-- แถบไอคอนเมนูด้านขวา -->
                 <div class="cc-sidebar">
                     <i class="fa-solid fa-heart active-page"></i>
                     <i class="fa-solid fa-house"></i>
